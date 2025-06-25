@@ -1,266 +1,231 @@
 void demonstrateClasses() {
-  print('=== Классы и ООП в Dart ===\n');
+  print('=== Dart Classes and OOP Basics ===\n');
 
-  // Создание объектов
-  print('1. Создание объектов:');
-  var person1 = Person('Алексей', 25);
-  var person2 = Person.withoutAge('Мария');
-
-  person1.introduce();
-  person2.introduce();
+  // Basic class usage
+  print('1. Basic Classes:');
+  var person = Person('Alice', 30);
+  person.introduce();
+  person.celebrateBirthday();
   print('');
 
-  // Использование геттеров и сеттеров
-  print('2. Геттеры и сеттеры:');
-  person1.age = 26;
-  print('Возраст изменен на: ${person1.age}');
-  print('Полное описание: ${person1.fullDescription}');
+  // Class with different constructors
+  print('2. Different Constructors:');
+  var student1 = Student('Bob', 20, 'Computer Science');
+  var student2 = Student.withGrade('Charlie', 22, 'Mathematics', 85.5);
+  var student3 = Student.graduate('Diana', 24, 'Physics');
+
+  student1.study();
+  student2.showGrade();
+  student3.study();
   print('');
 
-  // Наследование
-  print('3. Наследование:');
-  var student = Student('Иван', 20, 'Компьютерные науки');
-  student.introduce();
-  student.study();
+  // Inheritance
+  print('3. Inheritance:');
+  var employee = Employee('Frank', 35, 'Engineer', 75000);
+  employee.introduce(); // Inherited from Person
+  employee.work();
+  print('Salary: \$${employee.salary}');
   print('');
 
-  // Абстрактные классы
-  print('4. Абстрактные классы:');
-  var dog = Dog('Бобик');
-  var cat = Cat('Мурка');
+  // Abstract classes and polymorphism
+  print('4. Abstract Classes and Polymorphism:');
+  var shapes = <Shape>[Circle(5.0), Rectangle(4.0, 6.0), Triangle(3.0, 4.0)];
 
-  dog.makeSound();
-  cat.makeSound();
-  dog.move();
-  cat.move();
+  for (var shape in shapes) {
+    print('${shape.name} area: ${shape.calculateArea().toStringAsFixed(2)}');
+  }
   print('');
 
-  // Интерфейсы (implements)
-  print('5. Интерфейсы:');
-  var car = Car();
-  var bicycle = Bicycle();
-
-  car.start();
-  bicycle.start();
+  // Mixins
+  print('5. Mixins:');
+  var swimmer = Swimmer('Grace', 25);
+  swimmer.introduce();
+  swimmer.swim();
+  swimmer.dive();
   print('');
 
-  // Миксины
-  print('6. Миксины:');
-  var bird = Bird('Воробей');
-  bird.eat();
-  bird.fly();
-  bird.makeSound();
+  // Getters and Setters
+  print('6. Getters and Setters:');
+  var car = Car('Toyota', 'Camry');
+  print('Full name: ${car.fullName}');
+
+  car.speed = 60;
+  print('Current speed: ${car.speed} km/h');
+  car.accelerate(20);
+  print('Speed after acceleration: ${car.speed} km/h');
   print('');
 
-  // Перечисления (Enums)
-  print('7. Перечисления:');
-  demonstrateEnums();
-  print('');
-
-  // Обобщения (Generics)
-  print('8. Обобщения:');
-  var stringBox = Box<String>('Привет');
-  var intBox = Box<int>(42);
-
-  print('Строковая коробка: ${stringBox.getValue()}');
-  print('Числовая коробка: ${intBox.getValue()}');
-  print('');
-
-  // Фабричные конструкторы
-  print('9. Фабричные конструкторы:');
-  var logger1 = Logger.getInstance();
-  var logger2 = Logger.getInstance();
-  print('Один и тот же объект: ${identical(logger1, logger2)}');
+  // Static members
+  print('7. Static Members:');
+  print('Math constants: π = ${MathUtils.pi}, e = ${MathUtils.e}');
+  print('Circle area (radius 3): ${MathUtils.circleArea(3)}');
+  print('Rectangle area (4x5): ${MathUtils.rectangleArea(4, 5)}');
 }
 
-// Базовый класс
+// Basic class
 class Person {
   String name;
-  int _age;
+  int age;
 
-  // Конструктор
-  Person(this.name, this._age);
+  // Constructor
+  Person(this.name, this.age);
 
-  // Именованный конструктор
-  Person.withoutAge(this.name) : _age = 0;
-
-  // Геттер
-  int get age => _age;
-
-  // Сеттер
-  set age(int value) {
-    if (value >= 0) {
-      _age = value;
-    }
+  // Method
+  void introduce() {
+    print('Hi, I\'m $name and I\'m $age years old.');
   }
 
-  // Вычисляемое свойство
-  String get fullDescription => 'Имя: $name, Возраст: $_age';
-
-  // Метод
-  void introduce() {
-    print('Привет! Меня зовут $name, мне $_age лет.');
+  void celebrateBirthday() {
+    age++;
+    print('$name is now $age years old. Happy Birthday!');
   }
 }
 
-// Наследование
+// Class with multiple constructors
 class Student extends Person {
   String major;
+  double? grade;
 
+  // Default constructor
   Student(String name, int age, this.major) : super(name, age);
 
-  @override
-  void introduce() {
-    super.introduce();
-    print('Я изучаю $major.');
+  // Named constructor
+  Student.withGrade(String name, int age, this.major, this.grade)
+    : super(name, age);
+
+  // Factory constructor
+  factory Student.graduate(String name, int age, String major) {
+    return Student.withGrade(name, age, major, 95.0);
   }
 
   void study() {
-    print('$name занимается изучением $major.');
+    print('$name is studying $major.');
+  }
+
+  void showGrade() {
+    if (grade != null) {
+      print('$name has a grade of ${grade!.toStringAsFixed(1)} in $major.');
+    } else {
+      print('$name has no grade recorded yet.');
+    }
   }
 }
 
-// Абстрактный класс
-abstract class Animal {
-  String name;
+// Inheritance example
+class Employee extends Person {
+  String position;
+  double salary;
 
-  Animal(this.name);
+  Employee(String name, int age, this.position, this.salary) : super(name, age);
 
-  void makeSound();
-
-  void move() {
-    print('$name движется.');
+  void work() {
+    print('$name is working as a $position.');
   }
 }
 
-// Реализация абстрактного класса
-class Dog extends Animal {
-  Dog(String name) : super(name);
+// Abstract class
+abstract class Shape {
+  String get name;
+  double calculateArea();
+}
+
+// Concrete implementations
+class Circle extends Shape {
+  final double radius;
+
+  Circle(this.radius);
 
   @override
-  void makeSound() {
-    print('$name говорит: Гав-гав!');
-  }
+  String get name => 'Circle';
 
   @override
-  void move() {
-    print('$name бежит на четырех лапах.');
+  double calculateArea() {
+    return 3.14159 * radius * radius;
   }
 }
 
-class Cat extends Animal {
-  Cat(String name) : super(name);
+class Rectangle extends Shape {
+  final double width;
+  final double height;
+
+  Rectangle(this.width, this.height);
 
   @override
-  void makeSound() {
-    print('$name говорит: Мяу!');
-  }
+  String get name => 'Rectangle';
 
   @override
-  void move() {
-    print('$name грациозно ступает.');
+  double calculateArea() {
+    return width * height;
   }
 }
 
-// Интерфейс (класс для реализации)
-abstract class Startable {
-  void start();
-}
+class Triangle extends Shape {
+  final double base;
+  final double height;
 
-// Реализация интерфейса
-class Car implements Startable {
-  @override
-  void start() {
-    print('Машина заводится с ключа.');
-  }
-}
-
-class Bicycle implements Startable {
-  @override
-  void start() {
-    print('Велосипед начинает движение при педалировании.');
-  }
-}
-
-// Миксины
-mixin Flyable {
-  void fly() {
-    print('Летаю в небе!');
-  }
-}
-
-mixin Eatable {
-  void eat() {
-    print('Кушаю еду.');
-  }
-}
-
-class Bird extends Animal with Flyable, Eatable {
-  Bird(String name) : super(name);
+  Triangle(this.base, this.height);
 
   @override
-  void makeSound() {
-    print('$name поет: Чирик-чирик!');
+  String get name => 'Triangle';
+
+  @override
+  double calculateArea() {
+    return 0.5 * base * height;
   }
 }
 
-// Перечисления
-enum Color { red, green, blue, yellow }
+// Mixins
+mixin Swimming {
+  void swim() {
+    print('Swimming in the water...');
+  }
 
-enum Status {
-  pending('В ожидании'),
-  approved('Одобрено'),
-  rejected('Отклонено');
-
-  const Status(this.description);
-  final String description;
-}
-
-void demonstrateEnums() {
-  var color = Color.red;
-  print('Выбранный цвет: $color');
-  print('Индекс цвета: ${color.index}');
-
-  var status = Status.approved;
-  print('Статус: ${status.description}');
-
-  // Использование enum в switch
-  switch (color) {
-    case Color.red:
-      print('Красный - цвет страсти');
-      break;
-    case Color.green:
-      print('Зеленый - цвет природы');
-      break;
-    default:
-      print('Другой цвет');
+  void dive() {
+    print('Diving underwater...');
   }
 }
 
-// Обобщения (Generics)
-class Box<T> {
-  T _value;
+class Swimmer extends Person with Swimming {
+  Swimmer(String name, int age) : super(name, age);
+}
 
-  Box(this._value);
+// Class with getters and setters
+class Car {
+  String brand;
+  String model;
+  double _speed = 0;
 
-  T getValue() => _value;
+  Car(this.brand, this.model);
 
-  void setValue(T value) {
-    _value = value;
+  // Getter
+  String get fullName => '$brand $model';
+
+  // Getter and setter for speed
+  double get speed => _speed;
+
+  set speed(double value) {
+    if (value >= 0 && value <= 200) {
+      _speed = value;
+    } else {
+      print('Invalid speed. Must be between 0 and 200 km/h.');
+    }
+  }
+
+  void accelerate(double amount) {
+    speed = _speed + amount;
   }
 }
 
-// Синглтон с фабричным конструктором
-class Logger {
-  static Logger? _instance;
+// Class with static members
+class MathUtils {
+  static const double pi = 3.14159;
+  static const double e = 2.71828;
 
-  Logger._internal();
-
-  factory Logger.getInstance() {
-    return _instance ??= Logger._internal();
+  static double circleArea(double radius) {
+    return pi * radius * radius;
   }
 
-  void log(String message) {
-    print('[LOG] $message');
+  static double rectangleArea(double width, double height) {
+    return width * height;
   }
 }

@@ -1,86 +1,84 @@
 void demonstrateVariables() {
-  print('=== Основы работы с переменными в Dart ===\n');
+  print('=== Dart Variables and Data Types Basics ===\n');
 
-  // Переменные с явным указанием типа
+  // Variables with explicit type declaration
   int age = 25;
-  double height = 175.5;
-  String name = 'Алексей';
+  double height = 1.75;
+  String name = 'Alex';
   bool isStudent = true;
 
-  print('Явное указание типов:');
+  print('Explicit type declaration:');
   print('int age = $age');
   print('double height = $height');
   print('String name = $name');
   print('bool isStudent = $isStudent\n');
 
-  // Автоматический вывод типов с var
-  var autoAge = 30;
-  var autoName = 'Мария';
-  var autoHeight = 165.0;
+  // Automatic type inference with var
+  var autoAge = 30; // Dart infers int
+  var autoName = 'Maria'; // Dart infers String
+  var autoPrice = 99.99; // Dart infers double
 
-  print('Автоматический вывод типов с var:');
+  print('Automatic type inference with var:');
   print('var autoAge = $autoAge (${autoAge.runtimeType})');
   print('var autoName = $autoName (${autoName.runtimeType})');
-  print('var autoHeight = $autoHeight (${autoHeight.runtimeType})\n');
+  print('var autoPrice = $autoPrice (${autoPrice.runtimeType})\n');
 
-  // Константы
-  const pi = 3.14159;
-  final currentTime = DateTime.now();
+  // Constants
+  const pi = 3.14159; // Compile-time constant
+  final currentTime = DateTime.now(); // Runtime constant
 
-  print('Константы:');
-  print('const pi = $pi (компайл-тайм константа)');
-  print('final currentTime = $currentTime (рантайм константа)\n');
+  print('Constants:');
+  print('const pi = $pi');
+  print('final currentTime = $currentTime\n');
 
-  // Nullable переменные
-  String? nullableName;
-  int? nullableAge;
+  // Nullable and Non-nullable types
+  String nonNullableString = 'This cannot be null';
+  String? nullableString; // Can be null
+  nullableString = 'Now it has a value';
 
-  print('Nullable переменные:');
-  print('String? nullableName = $nullableName');
-  print('int? nullableAge = $nullableAge\n');
+  print('Nullable types:');
+  print('String nonNullableString = "$nonNullableString"');
+  print('String? nullableString = "$nullableString"\n');
 
-  // Присваивание значений nullable переменным
-  nullableName = 'Иван';
-  nullableAge = 28;
+  // Collections
+  List<String> fruits = ['Apple', 'Banana', 'Orange'];
+  Map<String, int> scores = {'Alice': 95, 'Bob': 87, 'Charlie': 92};
+  Set<String> uniqueColors = {
+    'Red',
+    'Green',
+    'Blue',
+    'Red',
+  }; // Duplicates removed
 
-  print('После присваивания:');
-  print('nullableName = $nullableName');
-  print('nullableAge = $nullableAge\n');
+  print('Collections:');
+  print('List<String> fruits = $fruits');
+  print('Map<String, int> scores = $scores');
+  print('Set<String> uniqueColors = $uniqueColors\n');
 
-  // Работа с nullable переменными
-  print('Безопасная работа с nullable:');
-  print('Длина имени: ${nullableName?.length ?? 0}');
-  print('Возраст или 0: ${nullableAge ?? 0}\n');
+  // String interpolation
+  String studentName = 'John';
+  int studentAge = 20;
+  double studentGrade = 85.5;
 
-  // Поздняя инициализация
-  late String lateInitialized;
-  lateInitialized = 'Инициализировано позже';
+  print('String interpolation:');
+  print('Student: $studentName, Age: $studentAge, Grade: $studentGrade');
+  print('Next year $studentName will be ${studentAge + 1} years old');
+  print('Grade with 2 decimal places: ${studentGrade.toStringAsFixed(2)}\n');
 
-  print('Late переменная:');
-  print('lateInitialized = $lateInitialized\n');
+  // Dynamic type
+  dynamic flexibleVariable = 'Initially a string';
+  print('Dynamic type:');
+  print(
+    'dynamic flexibleVariable = "$flexibleVariable" (${flexibleVariable.runtimeType})',
+  );
 
-  // Работа со списками
-  List<String> fruits = ['яблоко', 'банан', 'апельсин'];
-  var numbers = [1, 2, 3, 4, 5];
+  flexibleVariable = 42;
+  print(
+    'flexibleVariable = $flexibleVariable (${flexibleVariable.runtimeType})',
+  );
 
-  print('Списки:');
-  print('fruits = $fruits');
-  print('numbers = $numbers');
-  print('Первый фрукт: ${fruits[0]}');
-  print('Количество чисел: ${numbers.length}\n');
-
-  // Работа с Map
-  Map<String, int> ages = {'Алексей': 25, 'Мария': 30, 'Иван': 28};
-
-  print('Map (словарь):');
-  print('ages = $ages');
-  print('Возраст Марии: ${ages['Мария']}\n');
-
-  // Строковая интерполяция
-  String greeting = 'Привет, меня зовут $name, мне $age лет';
-  String calculation = '2 + 2 = ${2 + 2}';
-
-  print('Строковая интерполяция:');
-  print(greeting);
-  print(calculation);
+  flexibleVariable = true;
+  print(
+    'flexibleVariable = $flexibleVariable (${flexibleVariable.runtimeType})\n',
+  );
 }

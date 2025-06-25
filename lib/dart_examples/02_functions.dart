@@ -1,139 +1,114 @@
 void demonstrateFunctions() {
-  print('=== Функции в Dart ===\n');
+  print('=== Dart Functions Basics ===\n');
 
-  // Простая функция
-  print('1. Простые функции:');
-  sayHello();
-  print('');
+  // Basic function call
+  print('1. Basic Functions:');
+  greet('Alice');
+  int result = add(5, 3);
+  print('5 + 3 = $result\n');
 
-  // Функция с параметрами
-  print('2. Функции с параметрами:');
-  greetPerson('Алексей');
-  print('');
+  // Functions with optional parameters
+  print('2. Optional Parameters:');
+  printPersonInfo('Bob');
+  printPersonInfo('Charlie', 25);
+  printPersonInfo('Diana', 30, 'Engineer');
 
-  // Функция с возвращаемым значением
-  print('3. Функции с возвращаемым значением:');
-  int sum = addNumbers(5, 3);
-  print('Сумма 5 + 3 = $sum');
-  print('');
+  // Named parameters
+  print('\n3. Named Parameters:');
+  createUser(name: 'Eve', email: 'eve@example.com');
+  createUser(name: 'Frank', email: 'frank@example.com', age: 28);
 
-  // Функция с именованными параметрами
-  print('4. Функции с именованными параметрами:');
-  createUser(name: 'Мария', age: 25);
-  createUser(name: 'Иван', age: 30, city: 'Москва');
-  print('');
-
-  // Функция с опциональными позиционными параметрами
-  print('5. Опциональные позиционные параметры:');
-  print('Сумма двух чисел: ${calculate(10, 5)}');
-  print('Сумма трех чисел: ${calculate(10, 5, 2)}');
-  print('');
-
-  // Функция со значениями по умолчанию
-  print('6. Значения по умолчанию:');
-  printMessage('Привет!');
-  printMessage('Важное сообщение!', prefix: '[ВАЖНО]');
-  print('');
-
-  // Анонимные функции (лямбды)
-  print('7. Анонимные функции:');
+  // Anonymous functions and lambdas
+  print('\n4. Anonymous Functions:');
   var numbers = [1, 2, 3, 4, 5];
+
+  print('Original numbers: $numbers');
+
   var doubled = numbers.map((n) => n * 2).toList();
-  print('Исходный список: $numbers');
-  print('Удвоенные числа: $doubled');
-  print('');
+  print('Doubled: $doubled');
 
-  // Функции высшего порядка
-  print('8. Функции высшего порядка:');
   var evenNumbers = numbers.where((n) => n % 2 == 0).toList();
-  print('Четные числа: $evenNumbers');
+  print('Even numbers: $evenNumbers');
 
-  numbers.forEach((n) => print('Число: $n'));
-  print('');
+  // Higher-order functions
+  print('\n5. Higher-order Functions:');
+  int multiplyResult = calculate(10, 5, (a, b) => a * b);
+  print('10 * 5 = $multiplyResult');
 
-  // Функция, возвращающая функцию
-  print('9. Функция, возвращающая функцию:');
-  var multiplier = createMultiplier(3);
-  print('Умножение на 3: ${multiplier(4)}');
-  print('');
+  int divideResult = calculate(10, 5, (a, b) => a ~/ b);
+  print('10 ~/ 5 = $divideResult');
 
-  // Рекурсивная функция
-  print('10. Рекурсивная функция:');
-  print('Факториал 5 = ${factorial(5)}');
-  print('');
+  // Function as variable
+  print('\n6. Functions as Variables:');
+  var mathOperation = add;
+  print('Using function variable: ${mathOperation(7, 3)}');
 
-  // Асинхронные функции
-  print('11. Асинхронные функции:');
-  demonstrateAsync();
+  // Closure example
+  print('\n7. Closures:');
+  var counter = createCounter();
+  print('Counter: ${counter()}'); // 1
+  print('Counter: ${counter()}'); // 2
+  print('Counter: ${counter()}'); // 3
+
+  // Arrow functions
+  print('\n8. Arrow Functions:');
+  var square = (int x) => x * x;
+  print('Square of 4: ${square(4)}');
+
+  var isEven = (int x) => x % 2 == 0;
+  print('Is 7 even? ${isEven(7)}');
+  print('Is 8 even? ${isEven(8)}');
 }
 
-// Простая функция без параметров
-void sayHello() {
-  print('Привет, мир!');
+// Basic function
+void greet(String name) {
+  print('Hello, $name!');
 }
 
-// Функция с параметром
-void greetPerson(String name) {
-  print('Привет, $name!');
-}
-
-// Функция с возвращаемым значением
-int addNumbers(int a, int b) {
+// Function with return value
+int add(int a, int b) {
   return a + b;
 }
 
-// Краткая запись функции (стрелочная функция)
-int multiply(int a, int b) => a * b;
-
-// Функция с именованными параметрами
-void createUser({required String name, required int age, String? city}) {
-  print(
-    'Пользователь: $name, возраст: $age${city != null ? ', город: $city' : ''}',
-  );
+// Function with optional positional parameters
+void printPersonInfo(String name, [int? age, String? profession]) {
+  String info = 'Name: $name';
+  if (age != null) info += ', Age: $age';
+  if (profession != null) info += ', Profession: $profession';
+  print(info);
 }
 
-// Функция с опциональными позиционными параметрами
-int calculate(int a, int b, [int? c]) {
-  return c != null ? a + b + c : a + b;
+// Function with named parameters
+void createUser({required String name, required String email, int? age}) {
+  String userInfo = 'User created - Name: $name, Email: $email';
+  if (age != null) userInfo += ', Age: $age';
+  print(userInfo);
 }
 
-// Функция со значениями по умолчанию
-void printMessage(String message, {String prefix = '[INFO]'}) {
-  print('$prefix $message');
+// Higher-order function
+int calculate(int a, int b, int Function(int, int) operation) {
+  return operation(a, b);
 }
 
-// Функция, возвращающая функцию
-Function createMultiplier(int factor) {
-  return (int value) => value * factor;
+// Function that returns a function (closure)
+Function createCounter() {
+  int count = 0;
+  return () {
+    count++;
+    return count;
+  };
 }
 
-// Рекурсивная функция
-int factorial(int n) {
-  if (n <= 1) return 1;
-  return n * factorial(n - 1);
+// Generic function
+T getFirst<T>(List<T> list) {
+  if (list.isEmpty) {
+    throw Exception('List is empty');
+  }
+  return list.first;
 }
 
-// Асинхронная функция
-Future<void> demonstrateAsync() async {
-  print('Начало асинхронной операции...');
-
-  // Имитация асинхронной операции
+// Async function example (basic)
+Future<String> fetchData() async {
   await Future.delayed(Duration(seconds: 1));
-
-  print('Асинхронная операция завершена!');
-}
-
-// Генератор синхронный
-Iterable<int> countTo(int max) sync* {
-  for (int i = 1; i <= max; i++) {
-    yield i;
-  }
-}
-
-// Генератор асинхронный
-Stream<int> countStream(int max) async* {
-  for (int i = 1; i <= max; i++) {
-    await Future.delayed(Duration(milliseconds: 100));
-    yield i;
-  }
+  return 'Data fetched successfully!';
 }
