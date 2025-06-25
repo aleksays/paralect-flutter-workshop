@@ -20,6 +20,7 @@ This workshop teaches Flutter developers how to implement Clean Architecture pri
 All branches follow the same Clean Architecture principles:
 
 ### 📁 Project Structure
+
 ```
 lib/
 ├── core/
@@ -56,7 +57,8 @@ lib/
 
 ## 🔧 Core Technologies
 
-### Shared Dependencies:
+### Shared Dependencies
+
 - **Flutter** - UI framework
 - **Dio** - HTTP client for API requests
 - **get_it** - Dependency injection
@@ -64,7 +66,8 @@ lib/
 - **equatable** - Object comparison
 - **json_annotation** - JSON serialization
 
-### State Management Specific:
+### State Management Specific
+
 - **flutter_bloc** - BLoC pattern implementation
 - **provider** - Provider pattern implementation
 - **flutter_riverpod** - Riverpod pattern implementation
@@ -82,16 +85,19 @@ lib/
 ## 🎓 Learning Path
 
 ### 1. **Start with BLoC** (`03-rest-api-futurebuilder`)
+
 - Learn Clean Architecture fundamentals
 - Understand event-driven architecture
 - Master predictable state management
 
 ### 2. **Explore Provider** (`04-rest-api-provider`)
+
 - Understand ChangeNotifier pattern
 - Learn simpler state management approach
 - Compare with BLoC implementation
 
 ### 3. **Discover Riverpod** (`05-rest-api-riverpod`)
+
 - Experience modern state management
 - Learn compile-time safety
 - Understand provider composition
@@ -112,6 +118,7 @@ lib/
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - Flutter SDK (latest stable version)
 - Dart SDK
 - IDE (VS Code, Android Studio, or IntelliJ)
@@ -119,22 +126,26 @@ lib/
 ### Quick Start
 
 1. **Clone the repository:**
+
 ```bash
 git clone <repository-url>
 cd paralect_flutter_workshop
 ```
 
 2. **Install dependencies:**
+
 ```bash
 flutter pub get
 ```
 
 3. **Generate code:**
+
 ```bash
 dart run build_runner build
 ```
 
 4. **Choose a branch to explore:**
+
 ```bash
 # For BLoC implementation
 git checkout 03-rest-api-futurebuilder
@@ -147,24 +158,28 @@ git checkout 05-rest-api-riverpod
 ```
 
 5. **Run the application:**
+
 ```bash
 flutter run
 ```
 
 ## 📚 What You'll Learn
 
-### Clean Architecture Principles:
+### Clean Architecture Principles
+
 - ✅ **Separation of Concerns** - Clear layer responsibilities
 - ✅ **Dependency Inversion** - Domain doesn't depend on frameworks
 - ✅ **Testability** - Easy testing for each layer
 - ✅ **Independence** - UI, database, and frameworks are details
 
-### State Management Patterns:
+### State Management Patterns
+
 - ✅ **BLoC Pattern** - Event-driven architecture with streams
 - ✅ **Provider Pattern** - ChangeNotifier with InheritedWidget
 - ✅ **Riverpod Pattern** - Modern reactive programming
 
-### Flutter Best Practices:
+### Flutter Best Practices
+
 - ✅ **Code Generation** - JSON serialization automation
 - ✅ **Dependency Injection** - Proper service location
 - ✅ **Error Handling** - Functional error handling with Either
@@ -173,6 +188,7 @@ flutter run
 ## 🔗 API Information
 
 All branches use the **JSONPlaceholder API**:
+
 - **Base URL:** `https://jsonplaceholder.typicode.com`
 - **Endpoints:**
   - `GET /posts` - List of all posts
@@ -181,6 +197,7 @@ All branches use the **JSONPlaceholder API**:
 ## 📝 Workshop Structure
 
 Each branch contains:
+
 - 📖 **Detailed README** - Branch-specific documentation
 - 🛠️ **Complete Implementation** - Working app with state management
 - 🧪 **Tests** - Unit and widget tests
@@ -204,6 +221,7 @@ Each branch contains:
 ## 🤝 Contributing
 
 This is a workshop repository. Feel free to:
+
 - Report issues
 - Suggest improvements
 - Submit pull requests
