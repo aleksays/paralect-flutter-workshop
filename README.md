@@ -10,7 +10,7 @@ The project is organized according to Clean Architecture principles with **Provi
 
 ### 📁 Project Structure
 
-```
+```markdawn
 lib/
 ├── core/
 │   ├── error/
@@ -189,19 +189,19 @@ In this implementation, we've adopted a **simplified approach** to state managem
 
 ## 🚀 Getting Started
 
-1. Install dependencies:
+1.Install dependencies:
 
 ```bash
 flutter pub get
 ```
 
-2. Generate code for JSON serialization:
+2.Generate code for JSON serialization:
 
 ```bash
 dart run build_runner build
 ```
 
-3. Run the application:
+3.Run the application:
 
 ```bash
 flutter run
