@@ -27,7 +27,7 @@ Each state management branch includes a comprehensive **`TIPS_AND_TRICKS.md`** f
 - 🔍 **Debugging Techniques** - Tools and methods for debugging
 - 📱 **DevTools Integration** - Using Flutter DevTools effectively
 
-### Tips & Tricks by Branch:
+### Tips & Tricks by Branch
 
 - **BLoC Tips** - Event handling, state management, BlocBuilder optimization
 - **Provider Tips** - Consumer patterns, Selector usage, ChangeNotifier best practices
@@ -223,15 +223,18 @@ Each branch contains:
 ## 📚 Additional Resources
 
 ### Architecture & Patterns
+
 - [Clean Architecture - Uncle Bob](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
 - [Dependency Injection Guide](DEPENDENCY_INJECTION.md)
 
 ### State Management
+
 - [Flutter BLoC Documentation](https://bloclibrary.dev/)
 - [Provider Documentation](https://pub.dev/packages/provider)
 - [Riverpod Documentation](https://riverpod.dev/)
 
 ### Flutter Resources
+
 - [Flutter Official Documentation](https://flutter.dev/docs)
 - [Dart Language Tour](https://dart.dev/language/tour)
 - [Flutter Animation Guide](https://flutter.dev/docs/development/ui/animations)
