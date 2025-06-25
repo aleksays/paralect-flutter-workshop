@@ -1,59 +1,43 @@
-# Flutter Workshop: Clean Architecture with Multiple State Management Solutions
+# 🚀 Flutter Clean Architecture Workshop
 
-A comprehensive Flutter workshop demonstrating Clean Architecture implementation with three different state management approaches: **BLoC**, **Provider**, and **Riverpod**.
+A comprehensive Flutter workshop demonstrating **Clean Architecture** principles with different **state management** solutions. This educational project showcases how to build scalable, maintainable Flutter applications using industry best practices.
 
-## 🎯 Workshop Overview
+## 📋 Workshop Structure
 
-This workshop teaches Flutter developers how to implement Clean Architecture principles while comparing different state management solutions. Each branch demonstrates the same REST API functionality using a different state management approach.
+This workshop is organized into branches, each demonstrating different aspects of Flutter development:
 
-## 🌳 Branch Structure
+| Branch | Focus | State Management | Description |
+|--------|-------|------------------|-------------|
+| [`main`](../../tree/main) | **Workshop Overview** | - | Main branch with project overview and navigation |
+| [`01-dart-basics`](../../tree/01-dart-basics) | **Dart Fundamentals** | - | Variables, functions, classes, OOP concepts |
+| [`03-rest-api-futurebuilder`](../../tree/03-rest-api-futurebuilder) | **BLoC Pattern** | flutter_bloc | Clean Architecture + BLoC with event-driven architecture |
+| [`04-rest-api-provider`](../../tree/04-rest-api-provider) | **Provider Pattern** | provider | Clean Architecture + Provider with ChangeNotifier |
+| [`05-rest-api-riverpod`](../../tree/05-rest-api-riverpod) | **Riverpod Pattern** | riverpod | Clean Architecture + Riverpod with reactive programming |
 
-| Branch | State Management | Theme | Description |
-|--------|------------------|-------|-------------|
-| `main` | - | - | Workshop overview and setup |
-| `03-rest-api-futurebuilder` | **BLoC** | 🔵 Blue | Clean Architecture with BLoC pattern |
-| `04-rest-api-provider` | **Provider** | 🟢 Green | Clean Architecture with Provider pattern |
-| `05-rest-api-riverpod` | **Riverpod** | 🟣 Purple | Clean Architecture with Riverpod pattern |
+## 🏗️ Clean Architecture Overview
 
-## 🏗️ Clean Architecture Implementation
-
-All branches follow the same Clean Architecture principles:
-
-### 📁 Project Structure
+This workshop demonstrates **Clean Architecture** principles as defined by Robert C. Martin (Uncle Bob). The architecture is divided into three main layers:
 
 ```
-lib/
-├── core/
-│   ├── error/
-│   │   └── failures.dart              # Base error classes
-│   ├── injection/
-│   │   └── injection_container.dart   # Dependency Injection
-│   └── usecases/
-│       └── usecase.dart               # Base UseCase interface
-├── features/
-│   └── posts/
-│       ├── data/
-│       │   ├── datasources/
-│       │   │   └── posts_remote_data_source.dart
-│       │   ├── models/
-│       │   │   ├── post_model.dart
-│       │   │   └── post_model.g.dart
-│       │   └── repositories/
-│       │       └── posts_repository_impl.dart
-│       ├── domain/
-│       │   ├── entities/
-│       │   │   └── post.dart
-│       │   ├── repositories/
-│       │   │   └── posts_repository.dart
-│       │   └── usecases/
-│       │       ├── get_post.dart
-│       │       └── get_posts.dart
-│       └── presentation/
-│           ├── [state_management]/    # BLoC/Provider/Riverpod specific
-│           ├── pages/
-│           └── widgets/
-└── main.dart
+┌─────────────────────────────────────────┐
+│           Presentation Layer            │
+│  (UI, Widgets, State Management)        │
+├─────────────────────────────────────────┤
+│            Domain Layer                 │
+│     (Entities, Use Cases)               │
+├─────────────────────────────────────────┤
+│             Data Layer                  │
+│  (Repositories, Data Sources, Models)   │
+└─────────────────────────────────────────┘
 ```
+
+### 🎯 Architecture Benefits
+
+- ✅ **Separation of Concerns** - Each layer has a specific responsibility
+- ✅ **Dependency Inversion** - Inner layers don't depend on outer layers
+- ✅ **Testability** - Easy unit testing for each layer
+- ✅ **Maintainability** - Clean, organized, and scalable code
+- ✅ **Independence** - Business logic is independent of frameworks
 
 ## 🔧 Core Technologies
 
@@ -61,107 +45,14 @@ lib/
 
 - **Flutter** - UI framework
 - **Dio** - HTTP client for API requests
-- **get_it** - Dependency injection
-- **dartz** - Functional programming (Either)
-- **equatable** - Object comparison
+- **json_serializable** - JSON serialization
 - **json_annotation** - JSON serialization
 
 ### State Management Specific
 
 - **flutter_bloc** - BLoC pattern implementation
 - **provider** - Provider pattern implementation
-- **flutter_riverpod** - Riverpod pattern implementation
-
-## 📱 Features (All Branches)
-
-- ✅ Load posts list from JSONPlaceholder API
-- ✅ Detailed post view
-- ✅ Loading state handling
-- ✅ Error handling with retry capability
-- ✅ Clean Architecture implementation
-- ✅ Dependency Injection
-- ✅ JSON serialization with code generation
-
-## 🎓 Learning Path
-
-### 1. **Start with BLoC** (`03-rest-api-futurebuilder`)
-
-- Learn Clean Architecture fundamentals
-- Understand event-driven architecture
-- Master predictable state management
-
-### 2. **Explore Provider** (`04-rest-api-provider`)
-
-- Understand ChangeNotifier pattern
-- Learn simpler state management approach
-- Compare with BLoC implementation
-
-### 3. **Discover Riverpod** (`05-rest-api-riverpod`)
-
-- Experience modern state management
-- Learn compile-time safety
-- Understand provider composition
-
-## 🔄 State Management Comparison
-
-| Aspect | BLoC | Provider | Riverpod |
-|--------|------|----------|----------|
-| **Type Safety** | ✅ Compile-time | ❌ Runtime | ✅ Compile-time |
-| **Simplicity** | ❌ Complex | ✅ Simple | ✅ Very simple |
-| **Performance** | ✅ Excellent | ✅ Good | ✅ Excellent |
-| **Testing** | ✅ Easy | ✅ Easy | ✅ Easy |
-| **DevTools** | ✅ Excellent | ❌ Limited | ✅ Excellent |
-| **Learning Curve** | ❌ Steep | ✅ Easy | ✅ Easy |
-| **Boilerplate** | ❌ High | ✅ Low | ✅ Low |
-| **Predictability** | ✅ High | ✅ Medium | ✅ High |
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-- Flutter SDK (latest stable version)
-- Dart SDK
-- IDE (VS Code, Android Studio, or IntelliJ)
-
-### Quick Start
-
-1. **Clone the repository:**
-
-```bash
-git clone <repository-url>
-cd paralect_flutter_workshop
-```
-
-2. **Install dependencies:**
-
-```bash
-flutter pub get
-```
-
-3. **Generate code:**
-
-```bash
-dart run build_runner build
-```
-
-4. **Choose a branch to explore:**
-
-```bash
-# For BLoC implementation
-git checkout 03-rest-api-futurebuilder
-
-# For Provider implementation
-git checkout 04-rest-api-provider
-
-# For Riverpod implementation
-git checkout 05-rest-api-riverpod
-```
-
-5. **Run the application:**
-
-```bash
-flutter run
-```
+- **riverpod** - Modern reactive state management
 
 ## 📚 What You'll Learn
 
@@ -210,27 +101,73 @@ Each branch contains:
 - **Students** learning software architecture patterns
 - **Teams** deciding on state management solutions
 
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Flutter SDK (3.0+)
+- Dart SDK (3.0+)
+- IDE (VS Code, Android Studio, or IntelliJ)
+
+### Quick Start
+
+1. **Clone the repository:**
+   ```bash
+   git clone <repository-url>
+   cd paralect_flutter_workshop
+   ```
+
+2. **Choose a branch to explore:**
+   ```bash
+   # For Dart basics
+   git checkout 01-dart-basics
+   
+   # For BLoC pattern
+   git checkout 03-rest-api-futurebuilder
+   
+   # For Provider pattern  
+   git checkout 04-rest-api-provider
+   
+   # For Riverpod pattern
+   git checkout 05-rest-api-riverpod
+   ```
+
+3. **Install dependencies:**
+   ```bash
+   flutter pub get
+   ```
+
+4. **Run the app:**
+   ```bash
+   flutter run
+   ```
+
+## 📊 State Management Comparison
+
+| Feature | BLoC | Provider | Riverpod |
+|---------|------|----------|----------|
+| **Learning Curve** | Steep | Moderate | Moderate |
+| **Boilerplate** | High | Low | Low |
+| **Testing** | Excellent | Good | Excellent |
+| **Performance** | Excellent | Good | Excellent |
+| **Scalability** | Excellent | Good | Excellent |
+| **Community** | Large | Large | Growing |
+
 ## 📚 Additional Resources
 
 - [Clean Architecture - Uncle Bob](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
 - [Flutter BLoC Documentation](https://bloclibrary.dev/)
 - [Provider Documentation](https://pub.dev/packages/provider)
 - [Riverpod Documentation](https://riverpod.dev/)
-- [JSONPlaceholder API](https://jsonplaceholder.typicode.com/)
-
-## 🤝 Contributing
-
-This is a workshop repository. Feel free to:
-
-- Report issues
-- Suggest improvements
-- Submit pull requests
-- Share feedback
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ---
 
-🎉 **Happy Learning!** Explore each branch to master Clean Architecture with different state management solutions in Flutter!
+**Happy Learning! 🎉**
