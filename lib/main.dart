@@ -1,175 +1,239 @@
 import 'package:flutter/material.dart';
+import 'dart_examples/01_variables.dart';
+import 'dart_examples/02_functions.dart';
+import 'dart_examples/03_classes.dart' as dart_classes;
 
 void main() {
-  runApp(const FlutterWorkshopApp());
+  runApp(const DartBasicsApp());
+
+  // Демонстрация Dart примеров в консоли
+  print('\n🎯 Запуск демонстрации основ Dart...\n');
+
+  demonstrateVariables();
+  print('\n' + '=' * 50 + '\n');
+
+  demonstrateFunctions();
+  print('\n' + '=' * 50 + '\n');
+
+  dart_classes.demonstrateClasses();
+  print('\n' + '=' * 50 + '\n');
+
+  print('✅ Демонстрация основ Dart завершена!');
+  print('🔍 Изучите код в папке lib/dart_examples/');
 }
 
-class FlutterWorkshopApp extends StatelessWidget {
-  const FlutterWorkshopApp({super.key});
+class DartBasicsApp extends StatelessWidget {
+  const DartBasicsApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Workshop',
+      title: 'Dart Basics Workshop',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      home: const WorkshopMenuPage(),
+      home: const DartBasicsPage(),
     );
   }
 }
 
-class WorkshopMenuPage extends StatelessWidget {
-  const WorkshopMenuPage({super.key});
+class DartBasicsPage extends StatelessWidget {
+  const DartBasicsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Flutter Workshop'),
+        title: const Text('Основы Dart'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         centerTitle: true,
       ),
-      body: ListView(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
-        children: [
-          const Text(
-            'Добро пожаловать в Flutter Workshop!',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 20),
-          const Text(
-            'Выберите тему для изучения:',
-            style: TextStyle(fontSize: 18),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 30),
-          ...workshopTopics.map((topic) => _buildTopicCard(context, topic)),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTopicCard(BuildContext context, WorkshopTopic topic) {
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      child: ListTile(
-        leading: Icon(topic.icon, color: topic.color, size: 32),
-        title: Text(
-          topic.title,
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-        ),
-        subtitle: Text(topic.description),
-        trailing: const Icon(Icons.arrow_forward_ios),
-        onTap: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                'Переключитесь на ветку: ${topic.branch}\nЭта функция доступна в соответствующей ветке',
-              ),
-              duration: const Duration(seconds: 3),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Icon(Icons.code, size: 64, color: Colors.blue),
+            const SizedBox(height: 16),
+            Text(
+              'Основы языка Dart',
+              style: Theme.of(
+                context,
+              ).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
-          );
-        },
+            const SizedBox(height: 16),
+            const Text(
+              'Добро пожаловать в изучение основ языка Dart! '
+              'В этой части воркшопа мы изучим основные концепции языка.',
+              style: TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 32),
+            _buildTopicSection(context, '1. Переменные и типы данных', [
+              'Явное и автоматическое определение типов',
+              'Nullable и Non-nullable типы',
+              'Константы (const и final)',
+              'Коллекции (List, Map, Set)',
+              'Строковая интерполяция',
+            ], Colors.blue.shade600),
+            const SizedBox(height: 24),
+            _buildTopicSection(context, '2. Функции', [
+              'Объявление и вызов функций',
+              'Параметры (позиционные, именованные, опциональные)',
+              'Анонимные функции и лямбды',
+              'Функции высшего порядка',
+              'Асинхронное программирование',
+            ], Colors.green.shade600),
+            const SizedBox(height: 24),
+            _buildTopicSection(context, '3. Классы и ООП', [
+              'Создание классов и объектов',
+              'Конструкторы (обычные, именованные, фабричные)',
+              'Наследование и полиморфизм',
+              'Абстрактные классы и интерфейсы',
+              'Миксины и обобщения',
+            ], Colors.orange.shade600),
+            const SizedBox(height: 32),
+            Card(
+              color: Colors.amber.shade50,
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Row(
+                      children: [
+                        Icon(Icons.info, color: Colors.amber),
+                        SizedBox(width: 8),
+                        Text(
+                          'Практические примеры',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    const Text(
+                      'Все примеры кода выполняются при запуске приложения '
+                      'и выводятся в консоль. Откройте консоль в вашей IDE, '
+                      'чтобы увидеть результаты выполнения.',
+                    ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      'Исследуйте код в следующих файлах:',
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    const SizedBox(height: 8),
+                    ...[
+                      'lib/dart_examples/01_variables.dart',
+                      'lib/dart_examples/02_functions.dart',
+                      'lib/dart_examples/03_classes.dart',
+                    ].map(
+                      (file) => Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 2),
+                        child: Row(
+                          children: [
+                            const Icon(Icons.file_copy, size: 16),
+                            const SizedBox(width: 8),
+                            Text(
+                              file,
+                              style: const TextStyle(fontFamily: 'monospace'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 32),
+            Card(
+              color: Colors.green.shade50,
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Row(
+                      children: [
+                        Icon(Icons.arrow_forward, color: Colors.green),
+                        SizedBox(width: 8),
+                        Text(
+                          'Что дальше?',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    const Text(
+                      'После изучения основ Dart переходите к изучению Flutter:',
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      'git checkout 02-flutter-basics',
+                      style: TextStyle(
+                        fontFamily: 'monospace',
+                        backgroundColor: Colors.black12,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTopicSection(
+    BuildContext context,
+    String title,
+    List<String> items,
+    Color color,
+  ) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.circle, color: color, size: 12),
+                const SizedBox(width: 8),
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            ...items.map(
+              (item) => Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('• ', style: TextStyle(fontSize: 16)),
+                    Expanded(
+                      child: Text(item, style: const TextStyle(fontSize: 14)),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
-
-class WorkshopTopic {
-  final String title;
-  final String description;
-  final String branch;
-  final IconData icon;
-  final Color color;
-
-  const WorkshopTopic({
-    required this.title,
-    required this.description,
-    required this.branch,
-    required this.icon,
-    required this.color,
-  });
-}
-
-final List<WorkshopTopic> workshopTopics = [
-  const WorkshopTopic(
-    title: 'Основы Dart',
-    description: 'Переменные, функции, классы, наследование',
-    branch: '01-dart-basics',
-    icon: Icons.code,
-    color: Colors.blue,
-  ),
-  const WorkshopTopic(
-    title: 'Основы Flutter',
-    description: 'Виджеты, layout, stateful/stateless',
-    branch: '02-flutter-basics',
-    icon: Icons.widgets,
-    color: Colors.green,
-  ),
-  const WorkshopTopic(
-    title: 'REST API + FutureBuilder',
-    description: 'Работа с API, json_serializable, FutureBuilder',
-    branch: '03-rest-api-futurebuilder',
-    icon: Icons.api,
-    color: Colors.orange,
-  ),
-  const WorkshopTopic(
-    title: 'REST API + Provider',
-    description: 'Управление состоянием с Provider, posts feed',
-    branch: '04-rest-api-provider',
-    icon: Icons.layers,
-    color: Colors.purple,
-  ),
-  const WorkshopTopic(
-    title: 'REST API + BLoC',
-    description: 'Управление состоянием с BLoC, posts feed',
-    branch: '05-rest-api-bloc',
-    icon: Icons.architecture,
-    color: Colors.red,
-  ),
-  const WorkshopTopic(
-    title: 'REST API + Riverpod',
-    description: 'Управление состоянием с Riverpod, posts feed',
-    branch: '06-rest-api-riverpod',
-    icon: Icons.track_changes,
-    color: Colors.teal,
-  ),
-  const WorkshopTopic(
-    title: 'Темы + Provider',
-    description: 'Переключение тем (system, light, dark) с Provider',
-    branch: '07-theme-provider',
-    icon: Icons.palette,
-    color: Colors.indigo,
-  ),
-  const WorkshopTopic(
-    title: 'Темы + BLoC',
-    description: 'Переключение тем (system, light, dark) с BLoC',
-    branch: '08-theme-bloc',
-    icon: Icons.brightness_6,
-    color: Colors.pink,
-  ),
-  const WorkshopTopic(
-    title: 'Темы + Riverpod',
-    description: 'Переключение тем (system, light, dark) с Riverpod',
-    branch: '09-theme-riverpod',
-    icon: Icons.dark_mode,
-    color: Colors.brown,
-  ),
-  const WorkshopTopic(
-    title: 'Анимации',
-    description: 'Implicit и Explicit анимации, Hero анимации',
-    branch: '10-animations',
-    icon: Icons.animation,
-    color: Colors.cyan,
-  ),
-  const WorkshopTopic(
-    title: 'Tips & Tricks',
-    description: 'Полезные советы и трюки для Flutter разработки',
-    branch: '11-tips-tricks',
-    icon: Icons.lightbulb,
-    color: Colors.amber,
-  ),
-];
