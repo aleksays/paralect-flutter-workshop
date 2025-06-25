@@ -19,7 +19,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // Безопасно загружаем пост после того, как дерево виджетов стабилизировалось
+    // Safely load post after widget tree has stabilized
     if (!_hasLoaded) {
       _hasLoaded = true;
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -34,14 +34,14 @@ class _PostDetailPageState extends State<PostDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Пост #${widget.postId}'),
+        title: Text('Post #${widget.postId}'),
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
       ),
       body: BlocBuilder<PostsBloc, PostsState>(
         builder: (context, state) {
           if (state is PostLoading) {
-            return const LoadingWidget(message: 'Загрузка поста...');
+            return const LoadingWidget(message: 'Loading post...');
           } else if (state is PostError) {
             return ErrorDisplayWidget(
               message: state.message,
@@ -73,13 +73,13 @@ class _PostDetailPageState extends State<PostDetailPage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Пост #${post.id}',
+                                      'Post #${post.id}',
                                       style: Theme.of(
                                         context,
                                       ).textTheme.titleSmall,
                                     ),
                                     Text(
-                                      'Автор: ${post.userId}',
+                                      'Author: ${post.userId}',
                                       style: Theme.of(
                                         context,
                                       ).textTheme.bodySmall,
@@ -108,7 +108,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
               ),
             );
           }
-          return const Center(child: Text('Загружается...'));
+          return const Center(child: Text('Loading...'));
         },
       ),
     );

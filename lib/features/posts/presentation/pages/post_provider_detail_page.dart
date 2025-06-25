@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../providers/posts_provider.dart';
+import '../../../../core/injection/injection_container.dart' as di;
+import '../../domain/entities/post.dart';
+import '../../domain/usecases/get_post.dart';
 import '../widgets/error_widget.dart';
 import '../widgets/loading_widget.dart';
 
@@ -14,23 +15,39 @@ class PostProviderDetailPage extends StatefulWidget {
 }
 
 class _PostProviderDetailPageState extends State<PostProviderDetailPage> {
-  bool _hasLoaded = false;
-  PostsProvider? _postsProvider;
+  bool _isLoading = true;
+  Post? _post;
+  String? _errorMessage;
+  late final GetPost _getPost;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // Сохраняем ссылку на Provider для безопасного использования в dispose
-    _postsProvider = context.read<PostsProvider>();
+  void initState() {
+    super.initState();
+    _getPost = di.sl<GetPost>();
+    _loadPost();
+  }
 
-    // Безопасно загружаем пост после того, как дерево виджетов стабилизировалось
-    if (!_hasLoaded) {
-      _hasLoaded = true;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted && _postsProvider != null) {
-          _postsProvider!.fetchPost(widget.postId);
-        }
-      });
+  Future<void> _loadPost() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+
+    final result = await _getPost(GetPostParams(id: widget.postId));
+
+    if (mounted) {
+      result.fold(
+        (failure) => setState(() {
+          _isLoading = false;
+          _errorMessage = failure.message;
+          _post = null;
+        }),
+        (post) => setState(() {
+          _isLoading = false;
+          _post = post;
+          _errorMessage = null;
+        }),
+      );
     }
   }
 
@@ -38,99 +55,77 @@ class _PostProviderDetailPageState extends State<PostProviderDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Пост #${widget.postId} (Provider)'),
+        title: Text('Post #${widget.postId} (Provider)'),
         backgroundColor: Colors.green,
         foregroundColor: Colors.white,
       ),
-      body: Consumer<PostsProvider>(
-        builder: (context, postsProvider, child) {
-          switch (postsProvider.status) {
-            case PostsStatus.loading:
-              return const LoadingWidget(message: 'Загрузка поста...');
-            case PostsStatus.error:
-              return ErrorDisplayWidget(
-                message: postsProvider.errorMessage,
-                onRetry: () {
-                  if (mounted) {
-                    postsProvider.fetchPost(widget.postId);
-                  }
-                },
-              );
-            case PostsStatus.loaded:
-              final post = postsProvider.selectedPost;
-              if (post == null) {
-                return const Center(child: Text('Пост не найден'));
-              }
+      body: _buildBody(),
+    );
+  }
 
-              return SingleChildScrollView(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
+  Widget _buildBody() {
+    if (_isLoading) {
+      return const LoadingWidget(message: 'Loading post...');
+    }
+
+    if (_errorMessage != null) {
+      return ErrorDisplayWidget(message: _errorMessage!, onRetry: _loadPost);
+    }
+
+    if (_post == null) {
+      return const Center(child: Text('Post not found'));
+    }
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      CircleAvatar(child: Text(_post!.id.toString())),
+                      const SizedBox(width: 12),
+                      Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              children: [
-                                CircleAvatar(child: Text(post.id.toString())),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Пост #${post.id}',
-                                        style: Theme.of(
-                                          context,
-                                        ).textTheme.titleSmall,
-                                      ),
-                                      Text(
-                                        'Автор: ${post.userId}',
-                                        style: Theme.of(
-                                          context,
-                                        ).textTheme.bodySmall,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 16),
                             Text(
-                              post.title,
-                              style: Theme.of(context).textTheme.headlineSmall
-                                  ?.copyWith(fontWeight: FontWeight.bold),
+                              'Post #${_post!.id}',
+                              style: Theme.of(context).textTheme.titleSmall,
                             ),
-                            const SizedBox(height: 16),
                             Text(
-                              post.body,
-                              style: Theme.of(context).textTheme.bodyMedium,
+                              'Author: ${_post!.userId}',
+                              style: Theme.of(context).textTheme.bodySmall,
                             ),
                           ],
                         ),
                       ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    _post!.title,
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
                     ),
-                  ],
-                ),
-              );
-            case PostsStatus.initial:
-              return const Center(child: Text('Загружается...'));
-          }
-        },
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    _post!.body,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    // Безопасно очищаем выбранный пост используя сохраненную ссылку
-    if (_postsProvider != null) {
-      _postsProvider!.clearSelectedPost();
-    }
-    super.dispose();
   }
 }
