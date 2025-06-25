@@ -169,7 +169,7 @@ In this implementation, we've adopted a **simplified approach** to state managem
 4. **Simpler Navigation**: Pass `postId` instead of managing selected post state
 5. **Easier Testing**: Each component has clear, isolated responsibilities
 
-### Benefits:
+### Benefits
 
 ✅ **No state conflicts** between list and detail pages  
 ✅ **Cleaner Provider** with fewer responsibilities  
@@ -234,15 +234,16 @@ After studying this branch you will understand:
 
 ## 🔄 Provider vs BLoC vs Riverpod
 
-| Aspect | Provider | BLoC | Riverpod |
-|--------|----------|------|----------|
-| **Type Safety** | ❌ Runtime | ✅ Compile-time | ✅ Compile-time |
-| **Simplicity** | ✅ Simple | ❌ Complex | ✅ Very simple |
-| **Performance** | ✅ Good | ✅ Excellent | ✅ Excellent |
-| **Testing** | ✅ Easy | ✅ Easy | ✅ Easy |
-| **DevTools** | ❌ Limited | ✅ Excellent | ✅ Excellent |
-| **Learning Curve** | ✅ Easy | ❌ Steep | ✅ Easy |
-| **Boilerplate** | ✅ Low | ❌ High | ✅ Low |
+|      Aspect        |  Provider  |      BLoC      |    Riverpod     |
+|--------------------|------------|----------------|-----------------|
+| **Type Safety**    | ❌ Runtime | ✅ Compile-time | ✅ Compile-time |
+| **Simplicity**     | ✅ Simple  | ❌ Complex      | ✅ Very simple  |
+| **Performance**    | ✅ Good    | ✅ Excellent    | ✅ Excellent    |
+| **Testing**        | ✅ Easy    | ✅ Easy         | ✅ Easy         |
+| **DevTools**       | ❌ Limited | ✅ Excellent    | ✅ Excellent    |
+| **Learning Curve** | ✅ Easy    | ❌ Steep        | ✅ Easy         |
+| **Boilerplate**    | ✅ Low     | ❌ High         | ✅ Low          |
+|--------------------|----------- |----------------|-----------------|
 
 ## 📚 Provider Advantages
 
