@@ -1,115 +1,115 @@
-# 🎯 Основы Dart - Flutter Workshop
+# 🎯 Dart Fundamentals - Flutter Workshop
 
-Добро пожаловать в первую часть Flutter Workshop! Здесь мы изучим основы языка программирования Dart.
+Welcome to the first part of the Flutter Workshop! Here we'll learn the fundamentals of the Dart programming language.
 
-## 📖 Что вы изучите
+## 📖 What You'll Learn
 
-### 1. Переменные и типы данных
-- Явное и автоматическое определение типов (`int`, `String`, `var`)
-- Nullable и non-nullable типы (`String?`, `int?`)
-- Константы (`const` vs `final`)
-- Коллекции (`List`, `Map`, `Set`)
-- Строковая интерполяция
+### 1. Variables and Data Types
+- Explicit and automatic type inference (`int`, `String`, `var`)
+- Nullable and non-nullable types (`String?`, `int?`)
+- Constants (`const` vs `final`)
+- Collections (`List`, `Map`, `Set`)
+- String interpolation
 
-### 2. Функции
-- Объявление и вызов функций
-- Параметры (позиционные, именованные, опциональные)
-- Стрелочные функции
-- Анонимные функции и лямбды
-- Функции высшего порядка
-- Асинхронное программирование (`async/await`)
+### 2. Functions
+- Function declaration and invocation
+- Parameters (positional, named, optional)
+- Arrow functions
+- Anonymous functions and lambdas
+- Higher-order functions
+- Asynchronous programming (`async/await`)
 
-### 3. Классы и ООП
-- Создание классов и объектов
-- Конструкторы (обычные, именованные, фабричные)
-- Геттеры и сеттеры
-- Наследование и полиморфизм
-- Абстрактные классы и интерфейсы
-- Миксины (`mixin`)
-- Обобщения (`Generics`)
+### 3. Classes and OOP
+- Creating classes and objects
+- Constructors (default, named, factory)
+- Getters and setters
+- Inheritance and polymorphism
+- Abstract classes and interfaces
+- Mixins (`mixin`)
+- Generics
 
-## 🚀 Как запустить
+## 🚀 How to Run
 
-1. Убедитесь, что вы на правильной ветке:
+1. Make sure you're on the correct branch:
 ```bash
 git branch
-# Должна быть выделена: * 01-dart-basics
+# Should show: * 01-dart-basics
 ```
 
-2. Установите зависимости:
+2. Install dependencies:
 ```bash
 flutter pub get
 ```
 
-3. Запустите приложение:
+3. Run the application:
 ```bash
 flutter run
 ```
 
-## 📱 Что происходит
+## 📱 What Happens
 
-При запуске приложения:
+When you run the application:
 
-1. **В консоли** - выполняются все примеры Dart кода
-2. **В приложении** - отображается красивый интерфейс с описанием тем
+1. **In the console** - all Dart code examples are executed
+2. **In the app** - a beautiful interface displays topic descriptions
 
-## 📚 Изучение кода
+## 📚 Code Study
 
-Откройте и изучите следующие файлы:
+Open and explore the following files:
 
 ### `lib/dart_examples/01_variables.dart`
-Примеры работы с переменными:
-- Объявление переменных разных типов
-- Работа с nullable переменными
-- Использование констант
-- Операции с коллекциями
+Variable examples:
+- Declaring variables of different types
+- Working with nullable variables
+- Using constants
+- Operations with collections
 
 ### `lib/dart_examples/02_functions.dart`
-Примеры функций:
-- Различные способы объявления функций
-- Работа с параметрами
-- Асинхронные операции
-- Генераторы
+Function examples:
+- Various ways to declare functions
+- Working with parameters
+- Asynchronous operations
+- Generators
 
 ### `lib/dart_examples/03_classes.dart`
-Примеры ООП:
-- Создание классов
-- Наследование
-- Абстрактные классы
-- Миксины
-- Перечисления (Enums)
+OOP examples:
+- Creating classes
+- Inheritance
+- Abstract classes
+- Mixins
+- Enumerations (Enums)
 
-## 🎓 Практические задания
+## 🎓 Practical Exercises
 
-После изучения примеров попробуйте:
+After studying the examples, try to:
 
-1. **Создать свой класс** `Car` с полями `brand`, `model`, `year`
-2. **Добавить методы** для вывода информации о машине
-3. **Использовать наследование** - создать класс `ElectricCar`
-4. **Написать функцию** для фильтрации списка машин по году
+1. **Create your own class** `Car` with fields `brand`, `model`, `year`
+2. **Add methods** to display car information
+3. **Use inheritance** - create an `ElectricCar` class
+4. **Write a function** to filter a list of cars by year
 
-## 🔍 Полезные ресурсы
+## 🔍 Useful Resources
 
-- [Официальная документация Dart](https://dart.dev/language)
+- [Official Dart Documentation](https://dart.dev/language)
 - [Dart Language Tour](https://dart.dev/language/tour)
-- [DartPad - онлайн редактор](https://dartpad.dev/)
+- [DartPad - Online Editor](https://dartpad.dev/)
 
-## ➡️ Что дальше?
+## ➡️ What's Next?
 
-После изучения основ Dart переходите к изучению Flutter:
+After learning Dart fundamentals, proceed to studying Flutter:
 
 ```bash
-git checkout 02-flutter-basics
+git checkout 03-rest-api-futurebuilder
 ```
 
-## 💡 Советы
+## 💡 Tips
 
-- **Экспериментируйте** - изменяйте код и смотрите что происходит
-- **Используйте консоль** - все примеры выводят результаты в консоль
-- **Читайте ошибки** - они помогают понять проблемы в коде
-- **Задавайте вопросы** - если что-то непонятно
+- **Experiment** - modify the code and see what happens
+- **Use the console** - all examples output results to the console
+- **Read errors** - they help understand code problems
+- **Ask questions** - if something is unclear
 
 ---
 
-**Следующая тема**: [Основы Flutter](../02-flutter-basics) 
-**Назад**: [Главная](../main)
+**Next Topic**: [Clean Architecture + BLoC](../03-rest-api-futurebuilder)  
+**Back**: [Main](../main)
