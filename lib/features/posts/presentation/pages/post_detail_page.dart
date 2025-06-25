@@ -14,11 +14,20 @@ class PostDetailPage extends StatefulWidget {
 }
 
 class _PostDetailPageState extends State<PostDetailPage> {
+  bool _hasLoaded = false;
+
   @override
-  void initState() {
-    super.initState();
-    // Загружаем пост при инициализации
-    context.read<PostsBloc>().add(GetPostEvent(widget.postId));
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Безопасно загружаем пост после того, как дерево виджетов стабилизировалось
+    if (!_hasLoaded) {
+      _hasLoaded = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          context.read<PostsBloc>().add(GetPostEvent(widget.postId));
+        }
+      });
+    }
   }
 
   @override
@@ -37,7 +46,9 @@ class _PostDetailPageState extends State<PostDetailPage> {
             return ErrorDisplayWidget(
               message: state.message,
               onRetry: () {
-                context.read<PostsBloc>().add(GetPostEvent(widget.postId));
+                if (mounted) {
+                  context.read<PostsBloc>().add(GetPostEvent(widget.postId));
+                }
               },
             );
           } else if (state is PostLoaded) {
