@@ -33,20 +33,20 @@ Welcome to the first part of the Flutter Workshop! Here we'll learn the fundamen
 
 ## 🚀 How to Run
 
-1. Make sure you're on the correct branch:
+1.Make sure you're on the correct branch:
 
 ```bash
 git branch
 # Should show: * 01-dart-basics
 ```
 
-2. Install dependencies:
+2.Install dependencies:
 
 ```bash
 flutter pub get
 ```
 
-3. Run the application:
+3.Run the application:
 
 ```bash
 flutter run
