@@ -18,7 +18,7 @@ class _PostProviderDetailPageState extends State<PostProviderDetailPage> {
   @override
   void initState() {
     super.initState();
-    // Загружаем пост при инициализации
+    // Load post on initialization
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<PostsProvider>().fetchPost(widget.postId);
     });
@@ -28,7 +28,7 @@ class _PostProviderDetailPageState extends State<PostProviderDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Пост #${widget.postId} (Provider)'),
+        title: Text('Post #${widget.postId} (Provider)'),
         backgroundColor: Colors.green,
         foregroundColor: Colors.white,
       ),
@@ -36,7 +36,7 @@ class _PostProviderDetailPageState extends State<PostProviderDetailPage> {
         builder: (context, postsProvider, child) {
           switch (postsProvider.status) {
             case PostsStatus.loading:
-              return const LoadingWidget(message: 'Загрузка поста...');
+              return const LoadingWidget(message: 'Loading post...');
             case PostsStatus.error:
               return ErrorDisplayWidget(
                 message: postsProvider.errorMessage,
@@ -45,8 +45,9 @@ class _PostProviderDetailPageState extends State<PostProviderDetailPage> {
             case PostsStatus.loaded:
               final post = postsProvider.selectedPost;
               if (post == null) {
-                return const Center(child: Text('Пост не найден'));
+                return const Center(child: Text('Post not found'));
               }
+
               return SingleChildScrollView(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
@@ -68,13 +69,13 @@ class _PostProviderDetailPageState extends State<PostProviderDetailPage> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Пост #${post.id}',
+                                        'Post #${post.id}',
                                         style: Theme.of(
                                           context,
                                         ).textTheme.titleSmall,
                                       ),
                                       Text(
-                                        'Автор: ${post.userId}',
+                                        'Author: ${post.userId}',
                                         style: Theme.of(
                                           context,
                                         ).textTheme.bodySmall,
@@ -103,7 +104,7 @@ class _PostProviderDetailPageState extends State<PostProviderDetailPage> {
                 ),
               );
             case PostsStatus.initial:
-              return const Center(child: Text('Загружается...'));
+              return const Center(child: Text('Loading...'));
           }
         },
       ),
@@ -112,7 +113,7 @@ class _PostProviderDetailPageState extends State<PostProviderDetailPage> {
 
   @override
   void dispose() {
-    // Очищаем выбранный пост при закрытии страницы
+    // Clear selected post when closing the page
     context.read<PostsProvider>().clearSelectedPost();
     super.dispose();
   }

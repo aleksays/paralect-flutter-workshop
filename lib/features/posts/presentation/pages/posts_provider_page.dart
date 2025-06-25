@@ -14,7 +14,7 @@ class PostsProviderPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Посты (Provider)'),
+        title: const Text('Posts (Provider)'),
         backgroundColor: Colors.green,
         foregroundColor: Colors.white,
       ),
@@ -22,7 +22,7 @@ class PostsProviderPage extends StatelessWidget {
         builder: (context, postsProvider, child) {
           switch (postsProvider.status) {
             case PostsStatus.loading:
-              return const LoadingWidget(message: 'Загрузка постов...');
+              return const LoadingWidget(message: 'Loading posts...');
             case PostsStatus.error:
               return ErrorDisplayWidget(
                 message: postsProvider.errorMessage,
@@ -31,9 +31,7 @@ class PostsProviderPage extends StatelessWidget {
             case PostsStatus.loaded:
               return _buildPostsList(context, postsProvider.posts);
             case PostsStatus.initial:
-              return const Center(
-                child: Text('Нажмите кнопку для загрузки постов'),
-              );
+              return const Center(child: Text('Tap the button to load posts'));
           }
         },
       ),
@@ -47,7 +45,7 @@ class PostsProviderPage extends StatelessWidget {
 
   Widget _buildPostsList(BuildContext context, List<Post> posts) {
     if (posts.isEmpty) {
-      return const Center(child: Text('Нет доступных постов'));
+      return const Center(child: Text('No posts available'));
     }
 
     return ListView.builder(
