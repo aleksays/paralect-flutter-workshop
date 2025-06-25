@@ -1,16 +1,27 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../../core/injection/injection_container.dart' as di;
 import '../../../../core/usecases/usecase.dart';
 import '../../domain/entities/post.dart';
 import '../../domain/usecases/get_post.dart';
 import '../../domain/usecases/get_posts.dart';
 
-// Use Cases Providers
-final getPostsProvider = Provider<GetPosts>((ref) => di.sl<GetPosts>());
-final getPostProvider = Provider<GetPost>((ref) => di.sl<GetPost>());
+part 'posts_providers.g.dart';
 
-// Posts List Provider
-final postsProvider = FutureProvider<List<Post>>((ref) async {
+// Use case providers
+@riverpod
+GetPosts getPosts(Ref ref) {
+  return di.sl<GetPosts>();
+}
+
+@riverpod
+GetPost getPost(Ref ref) {
+  return di.sl<GetPost>();
+}
+
+// Simple FutureProvider for posts list
+@riverpod
+Future<List<Post>> posts(Ref ref) async {
   final getPosts = ref.watch(getPostsProvider);
   final result = await getPosts(const NoParams());
 
@@ -18,10 +29,11 @@ final postsProvider = FutureProvider<List<Post>>((ref) async {
     (failure) => throw Exception(failure.message),
     (posts) => posts,
   );
-});
+}
 
-// Single Post Provider
-final postProvider = FutureProvider.family<Post, int>((ref, id) async {
+// Family provider for individual post by ID
+@riverpod
+Future<Post> post(Ref ref, int id) async {
   final getPost = ref.watch(getPostProvider);
   final result = await getPost(GetPostParams(id: id));
 
@@ -29,62 +41,42 @@ final postProvider = FutureProvider.family<Post, int>((ref, id) async {
     (failure) => throw Exception(failure.message),
     (post) => post,
   );
-});
+}
 
-// Posts State Notifier for more complex state management
-class PostsNotifier extends StateNotifier<AsyncValue<List<Post>>> {
-  final GetPosts _getPosts;
+// Advanced StateNotifier for complex state management
+@riverpod
+class PostsNotifier extends _$PostsNotifier {
+  @override
+  Future<List<Post>> build() async {
+    // Initial load
+    return _fetchPosts();
+  }
 
-  PostsNotifier(this._getPosts) : super(const AsyncValue.loading());
+  Future<List<Post>> _fetchPosts() async {
+    final getPosts = ref.watch(getPostsProvider);
+    final result = await getPosts(const NoParams());
 
-  Future<void> fetchPosts() async {
-    state = const AsyncValue.loading();
-
-    final result = await _getPosts(const NoParams());
-
-    result.fold(
-      (failure) =>
-          state = AsyncValue.error(failure.message, StackTrace.current),
-      (posts) => state = AsyncValue.data(posts),
+    return result.fold(
+      (failure) => throw Exception(failure.message),
+      (posts) => posts,
     );
   }
 
-  void refresh() {
-    fetchPosts();
+  Future<void> refresh() async {
+    // Set loading state
+    state = const AsyncLoading();
+
+    // Refetch data
+    state = await AsyncValue.guard(() => _fetchPosts());
+  }
+
+  Future<void> addPost(Post post) async {
+    final currentPosts = await future;
+    state = AsyncData([...currentPosts, post]);
+  }
+
+  Future<void> removePost(int postId) async {
+    final currentPosts = await future;
+    state = AsyncData(currentPosts.where((post) => post.id != postId).toList());
   }
 }
-
-final postsNotifierProvider =
-    StateNotifierProvider<PostsNotifier, AsyncValue<List<Post>>>((ref) {
-      final getPosts = ref.watch(getPostsProvider);
-      return PostsNotifier(getPosts);
-    });
-
-// Single Post State Notifier
-class PostNotifier extends StateNotifier<AsyncValue<Post?>> {
-  final GetPost _getPost;
-
-  PostNotifier(this._getPost) : super(const AsyncValue.data(null));
-
-  Future<void> fetchPost(int id) async {
-    state = const AsyncValue.loading();
-
-    final result = await _getPost(GetPostParams(id: id));
-
-    result.fold(
-      (failure) =>
-          state = AsyncValue.error(failure.message, StackTrace.current),
-      (post) => state = AsyncValue.data(post),
-    );
-  }
-
-  void clear() {
-    state = const AsyncValue.data(null);
-  }
-}
-
-final postNotifierProvider =
-    StateNotifierProvider<PostNotifier, AsyncValue<Post?>>((ref) {
-      final getPost = ref.watch(getPostProvider);
-      return PostNotifier(getPost);
-    });

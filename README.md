@@ -1,12 +1,12 @@
-# Flutter Workshop: REST API + Clean Architecture + Riverpod
+# Flutter Workshop: REST API + Clean Architecture + Riverpod (Annotations)
 
-## Branch: 05-rest-api-riverpod
+## Branch: 06-rest-api-riverpod-annotations
 
-This branch demonstrates REST API implementation using **Clean Architecture** and **Riverpod** for state management in a Flutter application.
+This branch demonstrates REST API implementation using **Clean Architecture** and **Riverpod with annotations and code generation** for state management in a Flutter application.
 
 ## 🏗️ Architecture
 
-The project is organized according to Clean Architecture principles with **Riverpod** as a modern state management solution.
+The project is organized according to Clean Architecture principles with **Riverpod Annotations** as a modern, type-safe state management solution.
 
 ### 📁 Project Structure
 
@@ -38,8 +38,9 @@ lib/
 │       │       ├── get_post.dart
 │       │       └── get_posts.dart
 │       └── presentation/
-│           ├── providers/              # Riverpod Providers
-│           │   └── posts_providers.dart
+│           ├── providers/              # Riverpod Providers (with annotations)
+│           │   ├── posts_providers.dart
+│           │   └── posts_providers.g.dart
 │           ├── pages/
 │           │   ├── posts_riverpod_page.dart
 │           │   └── post_riverpod_detail_page.dart
@@ -55,30 +56,44 @@ lib/
 ### Core Dependencies
 
 - **Flutter** - UI framework
-- **Riverpod** - Modern state management
+- **Riverpod** - Modern state management with annotations
+- **riverpod_annotation** - Annotations for code generation
 - **Dio** - HTTP client for API requests
 - **get_it** - Dependency injection
 - **dartz** - Functional programming (Either)
 - **equatable** - Object comparison
 - **json_annotation** - JSON serialization
 
-## 🏛️ Riverpod State Management
+### Dev Dependencies
 
-### 📊 Riverpod Providers
+- **riverpod_generator** - Code generation for Riverpod
+- **build_runner** - Build system
 
-The `posts_providers.dart` file contains various provider types:
+## 🏛️ Riverpod Annotations State Management
 
-#### 1. Use Cases Providers
+### 📊 Generated Providers
+
+The `posts_providers.dart` file uses annotations for automatic code generation:
+
+#### 1. Use Case Providers
 
 ```dart
-final getPostsProvider = Provider<GetPosts>((ref) => di.sl<GetPosts>());
-final getPostProvider = Provider<GetPost>((ref) => di.sl<GetPost>());
+@riverpod
+GetPosts getPosts(GetPostsRef ref) {
+  return di.sl<GetPosts>();
+}
+
+@riverpod
+GetPost getPost(GetPostRef ref) {
+  return di.sl<GetPost>();
+}
 ```
 
-#### 2. FutureProvider for simple async operations
+#### 2. Simple FutureProvider
 
 ```dart
-final postsProvider = FutureProvider<List<Post>>((ref) async {
+@riverpod
+Future<List<Post>> posts(PostsRef ref) async {
   final getPosts = ref.watch(getPostsProvider);
   final result = await getPosts(const NoParams());
   
@@ -86,33 +101,50 @@ final postsProvider = FutureProvider<List<Post>>((ref) async {
     (failure) => throw Exception(failure.message),
     (posts) => posts,
   );
-});
+}
 ```
 
-#### 3. StateNotifierProvider for complex state management
+#### 3. Family Provider (Auto-generated)
 
 ```dart
-class PostsNotifier extends StateNotifier<AsyncValue<List<Post>>> {
-  Future<void> fetchPosts() async {
-    state = const AsyncValue.loading();
-    // Loading logic...
-  }
+@riverpod
+Future<Post> post(PostRef ref, int id) async {
+  final getPost = ref.watch(getPostProvider);
+  final result = await getPost(GetPostParams(id: id));
+  
+  return result.fold(
+    (failure) => throw Exception(failure.message),
+    (post) => post,
+  );
 }
-
-final postsNotifierProvider = StateNotifierProvider<PostsNotifier, AsyncValue<List<Post>>>((ref) {
-  return PostsNotifier(ref.watch(getPostsProvider));
-});
 ```
 
-## 🎯 Riverpod Patterns
+#### 4. StateNotifier with Annotations
 
-### ✅ ConsumerWidget for accessing ref
+```dart
+@riverpod
+class PostsNotifier extends _$PostsNotifier {
+  @override
+  Future<List<Post>> build() async {
+    return _fetchPosts();
+  }
+
+  Future<void> refresh() async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() => _fetchPosts());
+  }
+}
+```
+
+## 🎯 Riverpod Annotations Patterns
+
+### ✅ ConsumerWidget with ref parameter
 
 ```dart
 class PostsRiverpodPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final postsAsync = ref.watch(postsNotifierProvider);
+    final postsAsync = ref.watch(postsProvider);
     
     return postsAsync.when(
       loading: () => LoadingWidget(),
@@ -123,35 +155,61 @@ class PostsRiverpodPage extends ConsumerWidget {
 }
 ```
 
-### ✅ AsyncValue.when() for state handling
+### ✅ Family providers usage
 
 ```dart
-postsAsync.when(
-  loading: () => CircularProgressIndicator(),
-  data: (posts) => ListView.builder(...),
-  error: (error, stackTrace) => ErrorWidget(),
-)
+// Automatically generates postProvider.call(id)
+final postAsync = ref.watch(postProvider(postId));
+
+// Invalidate specific instance
+ref.invalidate(postProvider(postId));
 ```
 
-### ✅ Reading and modifying state
+### ✅ Type-safe provider access
 
 ```dart
-// Reading state
-final posts = ref.watch(postsProvider);
-
-// Triggering actions
-ref.read(postsNotifierProvider.notifier).fetchPosts();
+// Auto-generated with proper types
+ref.watch(postsProvider);           // AsyncValue<List<Post>>
+ref.watch(postProvider(1));        // AsyncValue<Post>
+ref.read(postsNotifierProvider.notifier); // PostsNotifier
 ```
+
+## 🎯 Annotations Benefits
+
+### ✅ **Type Safety**
+
+- All providers are type-safe at compile time
+- No runtime errors from incorrect provider access
+- Full IDE auto-completion support
+
+### ✅ **Code Generation**
+
+- No boilerplate code needed
+- Automatic family provider generation
+- Consistent API across all providers
+
+### ✅ **Developer Experience**
+
+- Better error messages
+- Automatic parameter handling
+- Built-in documentation
+
+### ✅ **Performance**
+
+- Optimized generated code
+- Automatic dependency tracking
+- Efficient rebuilds
 
 ## 📱 Features
 
 - ✅ Load posts list from JSONPlaceholder API
-- ✅ Detailed post view
-- ✅ Loading state handling with Riverpod
+- ✅ Detailed post view with family providers
+- ✅ Loading state handling with AsyncValue
 - ✅ Error handling with retry capability
-- ✅ Clean Architecture with Riverpod pattern
-- ✅ Dependency Injection
-- ✅ FutureProvider and StateNotifier patterns
+- ✅ Clean Architecture with Riverpod annotations
+- ✅ Type-safe state management
+- ✅ Code generation for providers
+- ✅ Automatic family provider handling
 
 ## 🚀 Getting Started
 
@@ -161,89 +219,106 @@ ref.read(postsNotifierProvider.notifier).fetchPosts();
 flutter pub get
 ```
 
-2.Generate code for JSON serialization:
+2.Generate code for both JSON serialization and Riverpod:
 
 ```bash
 dart run build_runner build
 ```
 
-3.Run the application:
+3.Watch for changes (optional):
+
+```bash
+dart run build_runner watch
+```
+
+4.Run the application:
 
 ```bash
 flutter run
 ```
 
-## 📝 Key Riverpod Files
+## 📝 Key Files
 
-### Riverpod State Management
+### Riverpod Annotations
 
-- `lib/features/posts/presentation/providers/posts_providers.dart` - All Riverpod providers
-- `lib/features/posts/presentation/pages/posts_riverpod_page.dart` - Main page with ConsumerWidget
-- `lib/features/posts/presentation/pages/post_riverpod_detail_page.dart` - Post details page
+- `lib/features/posts/presentation/providers/posts_providers.dart` - Annotated providers
+- `lib/features/posts/presentation/providers/posts_providers.g.dart` - Generated code
+- `lib/features/posts/presentation/pages/posts_riverpod_page.dart` - Main page
+- `lib/features/posts/presentation/pages/post_riverpod_detail_page.dart` - Detail page
 
 ### Main Application
 
-- `lib/main.dart` - ProviderScope and Riverpod setup
+- `lib/main.dart` - ProviderScope setup
+- `pubspec.yaml` - Dependencies including riverpod_annotation
 
 ## 🎯 Learning Objectives
 
 After studying this branch you will understand:
 
-1. ✅ **Riverpod State Management**
-2. ✅ **Provider, FutureProvider, StateNotifierProvider**
-3. ✅ **ConsumerWidget and ConsumerStatefulWidget**
-4. ✅ **AsyncValue and .when() method**
-5. ✅ **ref.watch() and ref.read()**
-6. ✅ **ProviderScope for DI**
-7. ✅ **State management with Clean Architecture**
-8. ✅ **Family providers for parameters**
+1. ✅ **Riverpod Annotations (@riverpod)**
+2. ✅ **Code generation with riverpod_generator**  
+3. ✅ **Type-safe provider definitions**
+4. ✅ **Automatic family provider generation**
+5. ✅ **ConsumerWidget and WidgetRef**
+6. ✅ **AsyncValue.when() pattern**
+7. ✅ **StateNotifier with annotations**
+8. ✅ **Provider invalidation and refresh**
 
-## 🔄 Riverpod vs Provider vs BLoC
+## 🔄 Comparison: Manual vs Annotations
 
-| Aspect | Riverpod | Provider | BLoC |
-|--------|----------|----------|------|
-| **Type Safety** | ✅ Compile-time | ❌ Runtime | ✅ Compile-time |
-| **Simplicity** | ✅ Very simple | ✅ Simple | ❌ Complex |
-| **Performance** | ✅ Excellent | ✅ Good | ✅ Excellent |
-| **Testing** | ✅ Easy | ✅ Easy | ✅ Easy |
-| **DevTools** | ✅ Excellent | ❌ Limited | ✅ Excellent |
-| **Async** | ✅ AsyncValue | ❌ Manual | ✅ Stream |
-| **Dependencies** | ✅ Automatic | ❌ Manual | ❌ Manual |
+| Aspect | Manual Riverpod | Riverpod Annotations |
+|--------|-----------------|---------------------|
+| **Type Safety** | ✅ Good | ✅ Excellent |
+| **Boilerplate** | ❌ High | ✅ Minimal |
+| **Family Providers** | ❌ Manual setup | ✅ Automatic |
+| **IDE Support** | ✅ Good | ✅ Excellent |
+| **Error Messages** | ✅ Good | ✅ Better |
+| **Learning Curve** | ✅ Moderate | ✅ Easy |
+| **Code Generation** | ❌ No | ✅ Yes |
 
-## 📚 Riverpod Advantages
+## 📚 Riverpod Annotations Advantages
 
-- 🔒 **Type Safety** - Compile-time checks
-- 🚀 **Performance** - Automatic optimization
-- 🧪 **Testability** - Easy testing and mocking
-- 🔄 **Reactive** - Automatic dependency updates
-- 🛠️ **DevTools** - Excellent debugging
-- 📱 **No Context** - No BuildContext dependency
-- 🔧 **Clean API** - Intuitive and simple API
+- 🎯 **Zero Boilerplate** - Annotations handle everything
+- 🔒 **Type Safety** - Compile-time checking
+- 🚀 **Auto-completion** - Full IDE support
+- 📝 **Self-documenting** - Clear provider definitions
+- 🔄 **Family Providers** - Automatic parameter handling
+- 🛠️ **Consistent API** - Same pattern for all providers
+- 🧪 **Easy Testing** - Generated providers are mockable
 
-## 🎯 Riverpod Provider Types
+## 🎯 Annotation Types
 
-### 1. **Provider** - For immutable data
+### 1. **@riverpod** - General purpose provider
 
 ```dart
-final configProvider = Provider((ref) => Config());
+@riverpod
+String config(ConfigRef ref) => 'value';
 ```
 
-### 2. **FutureProvider** - For async operations  
+### 2. **@riverpod** with async
 
 ```dart
-final userProvider = FutureProvider((ref) async => api.getUser());
+@riverpod
+Future<User> user(UserRef ref) async => api.getUser();
 ```
 
-### 3. **StateProvider** - For simple state
+### 3. **@riverpod** with parameters (family)
 
 ```dart
-final counterProvider = StateProvider((ref) => 0);
+@riverpod
+Future<Post> post(PostRef ref, int id) async => api.getPost(id);
 ```
 
-### 4. **StateNotifierProvider** - For complex state
+### 4. **@riverpod** class for StateNotifier
 
 ```dart
-final todosProvider = StateNotifierProvider<TodosNotifier, List<Todo>>((ref) => TodosNotifier());
+@riverpod
+class Counter extends _$Counter {
+  @override
+  int build() => 0;
+  
+  void increment() => state++;
+}
 ```
 
 ## 🔗 API
@@ -257,12 +332,12 @@ Uses **JSONPlaceholder API**:
 
 ## 📚 Additional Resources
 
-- [Riverpod Documentation](https://riverpod.dev/)
+- [Riverpod Annotations Documentation](https://riverpod.dev/docs/concepts/about_code_generation)
+- [Code Generation Guide](https://riverpod.dev/docs/concepts/about_code_generation)
 - [Riverpod vs Provider](https://riverpod.dev/docs/concepts/why_riverpod)
-- [Flutter State Management](https://flutter.dev/docs/development/data-and-backend/state-mgmt)
 - [Clean Architecture - Uncle Bob](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
 - [JSONPlaceholder API](https://jsonplaceholder.typicode.com/)
 
 ---
 
-🎉 **Congratulations!** You have learned Clean Architecture implementation with Riverpod in Flutter!
+🎉 **Congratulations!** You have learned Clean Architecture implementation with Riverpod Annotations in Flutter!
