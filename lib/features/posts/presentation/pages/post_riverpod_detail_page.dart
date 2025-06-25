@@ -7,8 +7,7 @@ import '../widgets/loading_widget.dart';
 class PostRiverpodDetailPage extends ConsumerStatefulWidget {
   final int postId;
 
-  const PostRiverpodDetailPage({Key? key, required this.postId})
-    : super(key: key);
+  const PostRiverpodDetailPage({super.key, required this.postId});
 
   @override
   ConsumerState<PostRiverpodDetailPage> createState() =>

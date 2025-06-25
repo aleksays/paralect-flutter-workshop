@@ -8,7 +8,7 @@ import '../widgets/post_card.dart';
 import 'post_riverpod_detail_page.dart';
 
 class PostsRiverpodPage extends ConsumerWidget {
-  const PostsRiverpodPage({Key? key}) : super(key: key);
+  const PostsRiverpodPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

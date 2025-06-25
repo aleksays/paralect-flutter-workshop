@@ -5,7 +5,7 @@ class PostCard extends StatelessWidget {
   final Post post;
   final VoidCallback? onTap;
 
-  const PostCard({Key? key, required this.post, this.onTap}) : super(key: key);
+  const PostCard({super.key, required this.post, this.onTap});
 
   @override
   Widget build(BuildContext context) {
