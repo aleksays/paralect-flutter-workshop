@@ -58,7 +58,10 @@ class PostsProviderPage extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => PostProviderDetailPage(postId: post.id),
+                builder: (context) => ChangeNotifierProvider.value(
+                  value: context.read<PostsProvider>(),
+                  child: PostProviderDetailPage(postId: post.id),
+                ),
               ),
             );
           },

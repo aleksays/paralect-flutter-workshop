@@ -15,15 +15,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Workshop - Clean Architecture + Provider',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
-        useMaterial3: true,
-      ),
-      home: ChangeNotifierProvider(
-        create: (_) => di.sl<PostsProvider>(),
-        child: const PostsProviderPage(),
+    return ChangeNotifierProvider(
+      create: (_) => di.sl<PostsProvider>(),
+      child: MaterialApp(
+        title: 'Flutter Workshop - Clean Architecture + Provider',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+          useMaterial3: true,
+        ),
+        home: const PostsProviderPage(),
       ),
     );
   }
