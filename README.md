@@ -10,7 +10,7 @@ The project is organized according to Clean Architecture principles with **River
 
 ### 📁 Project Structure
 
-```
+```markdown
 lib/
 ├── core/
 │   ├── error/
@@ -52,7 +52,8 @@ lib/
 
 ## 🔧 Technologies Used
 
-### Core Dependencies:
+### Core Dependencies
+
 - **Flutter** - UI framework
 - **Riverpod** - Modern state management
 - **Dio** - HTTP client for API requests
@@ -68,12 +69,14 @@ lib/
 The `posts_providers.dart` file contains various provider types:
 
 #### 1. Use Cases Providers
+
 ```dart
 final getPostsProvider = Provider<GetPosts>((ref) => di.sl<GetPosts>());
 final getPostProvider = Provider<GetPost>((ref) => di.sl<GetPost>());
 ```
 
 #### 2. FutureProvider for simple async operations
+
 ```dart
 final postsProvider = FutureProvider<List<Post>>((ref) async {
   final getPosts = ref.watch(getPostsProvider);
@@ -87,6 +90,7 @@ final postsProvider = FutureProvider<List<Post>>((ref) async {
 ```
 
 #### 3. StateNotifierProvider for complex state management
+
 ```dart
 class PostsNotifier extends StateNotifier<AsyncValue<List<Post>>> {
   Future<void> fetchPosts() async {
@@ -102,7 +106,7 @@ final postsNotifierProvider = StateNotifierProvider<PostsNotifier, AsyncValue<Li
 
 ## 🎯 Riverpod Patterns
 
-### ✅ ConsumerWidget for accessing ref:
+### ✅ ConsumerWidget for accessing ref
 
 ```dart
 class PostsRiverpodPage extends ConsumerWidget {
@@ -119,7 +123,7 @@ class PostsRiverpodPage extends ConsumerWidget {
 }
 ```
 
-### ✅ AsyncValue.when() for state handling:
+### ✅ AsyncValue.when() for state handling
 
 ```dart
 postsAsync.when(
@@ -129,7 +133,7 @@ postsAsync.when(
 )
 ```
 
-### ✅ Reading and modifying state:
+### ✅ Reading and modifying state
 
 ```dart
 // Reading state
@@ -151,29 +155,34 @@ ref.read(postsNotifierProvider.notifier).fetchPosts();
 
 ## 🚀 Getting Started
 
-1. Install dependencies:
+1.Install dependencies:
+
 ```bash
 flutter pub get
 ```
 
-2. Generate code for JSON serialization:
+2.Generate code for JSON serialization:
+
 ```bash
 dart run build_runner build
 ```
 
-3. Run the application:
+3.Run the application:
+
 ```bash
 flutter run
 ```
 
 ## 📝 Key Riverpod Files
 
-### Riverpod State Management:
+### Riverpod State Management
+
 - `lib/features/posts/presentation/providers/posts_providers.dart` - All Riverpod providers
 - `lib/features/posts/presentation/pages/posts_riverpod_page.dart` - Main page with ConsumerWidget
 - `lib/features/posts/presentation/pages/post_riverpod_detail_page.dart` - Post details page
 
-### Main Application:
+### Main Application
+
 - `lib/main.dart` - ProviderScope and Riverpod setup
 
 ## 🎯 Learning Objectives
@@ -214,21 +223,25 @@ After studying this branch you will understand:
 ## 🎯 Riverpod Provider Types
 
 ### 1. **Provider** - For immutable data
+
 ```dart
 final configProvider = Provider((ref) => Config());
 ```
 
 ### 2. **FutureProvider** - For async operations  
+
 ```dart
 final userProvider = FutureProvider((ref) async => api.getUser());
 ```
 
 ### 3. **StateProvider** - For simple state
+
 ```dart
 final counterProvider = StateProvider((ref) => 0);
 ```
 
 ### 4. **StateNotifierProvider** - For complex state
+
 ```dart
 final todosProvider = StateNotifierProvider<TodosNotifier, List<Todo>>((ref) => TodosNotifier());
 ```
@@ -236,6 +249,7 @@ final todosProvider = StateNotifierProvider<TodosNotifier, List<Todo>>((ref) => 
 ## 🔗 API
 
 Uses **JSONPlaceholder API**:
+
 - Base URL: `https://jsonplaceholder.typicode.com`
 - Endpoints:
   - `GET /posts` - List of all posts
