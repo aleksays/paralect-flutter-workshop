@@ -1,122 +1,175 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const FlutterWorkshopApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class FlutterWorkshopApp extends StatelessWidget {
+  const FlutterWorkshopApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Flutter Workshop',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const WorkshopMenuPage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+class WorkshopMenuPage extends StatelessWidget {
+  const WorkshopMenuPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
+        title: const Text('Flutter Workshop'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        centerTitle: true,
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          const Text(
+            'Добро пожаловать в Flutter Workshop!',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 20),
+          const Text(
+            'Выберите тему для изучения:',
+            style: TextStyle(fontSize: 18),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 30),
+          ...workshopTopics.map((topic) => _buildTopicCard(context, topic)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTopicCard(BuildContext context, WorkshopTopic topic) {
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      child: ListTile(
+        leading: Icon(topic.icon, color: topic.color, size: 32),
+        title: Text(
+          topic.title,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         ),
+        subtitle: Text(topic.description),
+        trailing: const Icon(Icons.arrow_forward_ios),
+        onTap: () {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'Переключитесь на ветку: ${topic.branch}\nЭта функция доступна в соответствующей ветке',
+              ),
+              duration: const Duration(seconds: 3),
+            ),
+          );
+        },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
+
+class WorkshopTopic {
+  final String title;
+  final String description;
+  final String branch;
+  final IconData icon;
+  final Color color;
+
+  const WorkshopTopic({
+    required this.title,
+    required this.description,
+    required this.branch,
+    required this.icon,
+    required this.color,
+  });
+}
+
+final List<WorkshopTopic> workshopTopics = [
+  const WorkshopTopic(
+    title: 'Основы Dart',
+    description: 'Переменные, функции, классы, наследование',
+    branch: '01-dart-basics',
+    icon: Icons.code,
+    color: Colors.blue,
+  ),
+  const WorkshopTopic(
+    title: 'Основы Flutter',
+    description: 'Виджеты, layout, stateful/stateless',
+    branch: '02-flutter-basics',
+    icon: Icons.widgets,
+    color: Colors.green,
+  ),
+  const WorkshopTopic(
+    title: 'REST API + FutureBuilder',
+    description: 'Работа с API, json_serializable, FutureBuilder',
+    branch: '03-rest-api-futurebuilder',
+    icon: Icons.api,
+    color: Colors.orange,
+  ),
+  const WorkshopTopic(
+    title: 'REST API + Provider',
+    description: 'Управление состоянием с Provider, posts feed',
+    branch: '04-rest-api-provider',
+    icon: Icons.layers,
+    color: Colors.purple,
+  ),
+  const WorkshopTopic(
+    title: 'REST API + BLoC',
+    description: 'Управление состоянием с BLoC, posts feed',
+    branch: '05-rest-api-bloc',
+    icon: Icons.architecture,
+    color: Colors.red,
+  ),
+  const WorkshopTopic(
+    title: 'REST API + Riverpod',
+    description: 'Управление состоянием с Riverpod, posts feed',
+    branch: '06-rest-api-riverpod',
+    icon: Icons.track_changes,
+    color: Colors.teal,
+  ),
+  const WorkshopTopic(
+    title: 'Темы + Provider',
+    description: 'Переключение тем (system, light, dark) с Provider',
+    branch: '07-theme-provider',
+    icon: Icons.palette,
+    color: Colors.indigo,
+  ),
+  const WorkshopTopic(
+    title: 'Темы + BLoC',
+    description: 'Переключение тем (system, light, dark) с BLoC',
+    branch: '08-theme-bloc',
+    icon: Icons.brightness_6,
+    color: Colors.pink,
+  ),
+  const WorkshopTopic(
+    title: 'Темы + Riverpod',
+    description: 'Переключение тем (system, light, dark) с Riverpod',
+    branch: '09-theme-riverpod',
+    icon: Icons.dark_mode,
+    color: Colors.brown,
+  ),
+  const WorkshopTopic(
+    title: 'Анимации',
+    description: 'Implicit и Explicit анимации, Hero анимации',
+    branch: '10-animations',
+    icon: Icons.animation,
+    color: Colors.cyan,
+  ),
+  const WorkshopTopic(
+    title: 'Tips & Tricks',
+    description: 'Полезные советы и трюки для Flutter разработки',
+    branch: '11-tips-tricks',
+    icon: Icons.lightbulb,
+    color: Colors.amber,
+  ),
+];
