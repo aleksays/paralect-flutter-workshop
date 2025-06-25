@@ -5,6 +5,7 @@ Welcome to the first part of the Flutter Workshop! Here we'll learn the fundamen
 ## 📖 What You'll Learn
 
 ### 1. Variables and Data Types
+
 - Explicit and automatic type inference (`int`, `String`, `var`)
 - Nullable and non-nullable types (`String?`, `int?`)
 - Constants (`const` vs `final`)
@@ -12,6 +13,7 @@ Welcome to the first part of the Flutter Workshop! Here we'll learn the fundamen
 - String interpolation
 
 ### 2. Functions
+
 - Function declaration and invocation
 - Parameters (positional, named, optional)
 - Arrow functions
@@ -20,6 +22,7 @@ Welcome to the first part of the Flutter Workshop! Here we'll learn the fundamen
 - Asynchronous programming (`async/await`)
 
 ### 3. Classes and OOP
+
 - Creating classes and objects
 - Constructors (default, named, factory)
 - Getters and setters
@@ -31,17 +34,20 @@ Welcome to the first part of the Flutter Workshop! Here we'll learn the fundamen
 ## 🚀 How to Run
 
 1. Make sure you're on the correct branch:
+
 ```bash
 git branch
 # Should show: * 01-dart-basics
 ```
 
 2. Install dependencies:
+
 ```bash
 flutter pub get
 ```
 
 3. Run the application:
+
 ```bash
 flutter run
 ```
@@ -58,21 +64,27 @@ When you run the application:
 Open and explore the following files:
 
 ### `lib/dart_examples/01_variables.dart`
+
 Variable examples:
+
 - Declaring variables of different types
 - Working with nullable variables
 - Using constants
 - Operations with collections
 
 ### `lib/dart_examples/02_functions.dart`
+
 Function examples:
+
 - Various ways to declare functions
 - Working with parameters
 - Asynchronous operations
 - Generators
 
 ### `lib/dart_examples/03_classes.dart`
+
 OOP examples:
+
 - Creating classes
 - Inheritance
 - Abstract classes
