@@ -59,7 +59,10 @@ class PostsPage extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => PostDetailPage(postId: post.id),
+                builder: (context) => BlocProvider.value(
+                  value: context.read<PostsBloc>(),
+                  child: PostDetailPage(postId: post.id),
+                ),
               ),
             );
           },
