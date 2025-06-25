@@ -1163,7 +1163,7 @@ class _PhysicsAnimationsPageState extends State<PhysicsAnimationsPage>
       vsync: this,
     );
 
-    _gravityAnimation = Tween<double>(begin: 0, end: 300).animate(
+    _gravityAnimation = Tween<double>(begin: 0, end: 240).animate(
       CurvedAnimation(parent: _gravityController, curve: Curves.bounceOut),
     );
   }
@@ -1182,111 +1182,109 @@ class _PhysicsAnimationsPageState extends State<PhysicsAnimationsPage>
         title: const Text('Physics Animations'),
         backgroundColor: Colors.teal.shade100,
       ),
-      body: Padding(
+      body: ListView(
         padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Physics-Based Animations',
-              style: Theme.of(
-                context,
-              ).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              'Animations that simulate real-world physics like springs and gravity.',
-              style: TextStyle(fontSize: 16),
-            ),
-            const SizedBox(height: 32),
-            _buildPhysicsSection(
-              'Spring Animation',
-              'Elastic bounce effect using Curves.elasticOut',
-              SizedBox(
-                height: 250,
-                child: Stack(
-                  children: [
-                    AnimatedBuilder(
-                      animation: _springAnimation,
-                      builder: (context, child) {
-                        return Positioned(
-                          left: _springAnimation.value,
-                          top: 50,
-                          child: Container(
-                            width: 50,
-                            height: 50,
-                            decoration: const BoxDecoration(
-                              color: Colors.blue,
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Icon(
-                              Icons.sports_basketball,
-                              color: Colors.white,
-                            ),
+        children: [
+          Text(
+            'Physics-Based Animations',
+            style: Theme.of(
+              context,
+            ).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 16),
+          const Text(
+            'Animations that simulate real-world physics like springs and gravity.',
+            style: TextStyle(fontSize: 16),
+          ),
+          const SizedBox(height: 32),
+          _buildPhysicsSection(
+            'Spring Animation',
+            'Elastic bounce effect using Curves.elasticOut',
+            SizedBox(
+              height: 200, // Reduced height
+              child: Stack(
+                children: [
+                  AnimatedBuilder(
+                    animation: _springAnimation,
+                    builder: (context, child) {
+                      return Positioned(
+                        left: _springAnimation.value,
+                        top: 50,
+                        child: Container(
+                          width: 50,
+                          height: 50,
+                          decoration: const BoxDecoration(
+                            color: Colors.blue,
+                            shape: BoxShape.circle,
                           ),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              [
-                ElevatedButton(
-                  onPressed: () {
-                    _springController.reset();
-                    _springController.forward();
-                  },
-                  child: const Text('Spring!'),
-                ),
-              ],
-            ),
-            const SizedBox(height: 32),
-            _buildPhysicsSection(
-              'Gravity Animation',
-              'Bouncing ball effect using Curves.bounceOut',
-              SizedBox(
-                height: 350,
-                child: Stack(
-                  children: [
-                    AnimatedBuilder(
-                      animation: _gravityAnimation,
-                      builder: (context, child) {
-                        return Positioned(
-                          left: 100,
-                          top: _gravityAnimation.value,
-                          child: Container(
-                            width: 40,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: Colors.red,
-                              shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.3),
-                                  blurRadius: 8,
-                                  offset: const Offset(0, 4),
-                                ),
-                              ],
-                            ),
+                          child: const Icon(
+                            Icons.sports_basketball,
+                            color: Colors.white,
                           ),
-                        );
-                      },
-                    ),
-                  ],
-                ),
+                        ),
+                      );
+                    },
+                  ),
+                ],
               ),
-              [
-                ElevatedButton(
-                  onPressed: () {
-                    _gravityController.reset();
-                    _gravityController.forward();
-                  },
-                  child: const Text('Drop!'),
-                ),
-              ],
             ),
-          ],
-        ),
+            [
+              ElevatedButton(
+                onPressed: () {
+                  _springController.reset();
+                  _springController.forward();
+                },
+                child: const Text('Spring!'),
+              ),
+            ],
+          ),
+          const SizedBox(height: 32),
+          _buildPhysicsSection(
+            'Gravity Animation',
+            'Bouncing ball effect using Curves.bounceOut',
+            SizedBox(
+              height: 280, // Reduced height
+              child: Stack(
+                children: [
+                  AnimatedBuilder(
+                    animation: _gravityAnimation,
+                    builder: (context, child) {
+                      return Positioned(
+                        left: 100,
+                        top: _gravityAnimation.value,
+                        child: Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.3),
+                                blurRadius: 8,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+            [
+              ElevatedButton(
+                onPressed: () {
+                  _gravityController.reset();
+                  _gravityController.forward();
+                },
+                child: const Text('Drop!'),
+              ),
+            ],
+          ),
+          const SizedBox(height: 32), // Extra space at bottom
+        ],
       ),
     );
   }
