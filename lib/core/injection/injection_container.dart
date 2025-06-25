@@ -51,6 +51,7 @@ Future<void> init() async {
       responseHeader: true,
       responseBody: true,
       error: true,
+      // ignore: avoid_print
       logPrint: (obj) => print('🌐 HTTP: $obj'),
     ),
   );

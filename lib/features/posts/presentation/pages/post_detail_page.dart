@@ -7,7 +7,7 @@ import '../widgets/loading_widget.dart';
 class PostDetailPage extends StatefulWidget {
   final int postId;
 
-  const PostDetailPage({Key? key, required this.postId}) : super(key: key);
+  const PostDetailPage({super.key, required this.postId});
 
   @override
   State<PostDetailPage> createState() => _PostDetailPageState();
