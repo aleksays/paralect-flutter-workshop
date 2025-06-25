@@ -1,9 +1,9 @@
 // ignore_for_file: avoid_print, prefer_interpolation_to_compose_strings
 
 import 'package:flutter/material.dart';
-import 'dart_examples/01_variables.dart';
-import 'dart_examples/02_functions.dart';
-import 'dart_examples/03_classes.dart' as dart_classes;
+import 'dart_examples/variables.dart';
+import 'dart_examples/functions.dart';
+import 'dart_examples/classes.dart' as dart_classes;
 
 void main() {
   runApp(const DartBasicsApp());
