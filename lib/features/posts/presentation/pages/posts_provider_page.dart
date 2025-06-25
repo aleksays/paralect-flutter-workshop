@@ -8,7 +8,7 @@ import '../widgets/post_card.dart';
 import 'post_provider_detail_page.dart';
 
 class PostsProviderPage extends StatelessWidget {
-  const PostsProviderPage({Key? key}) : super(key: key);
+  const PostsProviderPage({super.key});
 
   @override
   Widget build(BuildContext context) {

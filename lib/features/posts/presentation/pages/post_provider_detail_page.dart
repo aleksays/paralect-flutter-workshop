@@ -7,28 +7,38 @@ import '../widgets/loading_widget.dart';
 class PostProviderDetailPage extends StatefulWidget {
   final int postId;
 
-  const PostProviderDetailPage({Key? key, required this.postId})
-    : super(key: key);
+  const PostProviderDetailPage({super.key, required this.postId});
 
   @override
   State<PostProviderDetailPage> createState() => _PostProviderDetailPageState();
 }
 
 class _PostProviderDetailPageState extends State<PostProviderDetailPage> {
+  bool _hasLoaded = false;
+  PostsProvider? _postsProvider;
+
   @override
-  void initState() {
-    super.initState();
-    // Load post on initialization
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<PostsProvider>().fetchPost(widget.postId);
-    });
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Сохраняем ссылку на Provider для безопасного использования в dispose
+    _postsProvider = context.read<PostsProvider>();
+
+    // Безопасно загружаем пост после того, как дерево виджетов стабилизировалось
+    if (!_hasLoaded) {
+      _hasLoaded = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && _postsProvider != null) {
+          _postsProvider!.fetchPost(widget.postId);
+        }
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Post #${widget.postId} (Provider)'),
+        title: Text('Пост #${widget.postId} (Provider)'),
         backgroundColor: Colors.green,
         foregroundColor: Colors.white,
       ),
@@ -36,16 +46,20 @@ class _PostProviderDetailPageState extends State<PostProviderDetailPage> {
         builder: (context, postsProvider, child) {
           switch (postsProvider.status) {
             case PostsStatus.loading:
-              return const LoadingWidget(message: 'Loading post...');
+              return const LoadingWidget(message: 'Загрузка поста...');
             case PostsStatus.error:
               return ErrorDisplayWidget(
                 message: postsProvider.errorMessage,
-                onRetry: () => postsProvider.fetchPost(widget.postId),
+                onRetry: () {
+                  if (mounted) {
+                    postsProvider.fetchPost(widget.postId);
+                  }
+                },
               );
             case PostsStatus.loaded:
               final post = postsProvider.selectedPost;
               if (post == null) {
-                return const Center(child: Text('Post not found'));
+                return const Center(child: Text('Пост не найден'));
               }
 
               return SingleChildScrollView(
@@ -69,13 +83,13 @@ class _PostProviderDetailPageState extends State<PostProviderDetailPage> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Post #${post.id}',
+                                        'Пост #${post.id}',
                                         style: Theme.of(
                                           context,
                                         ).textTheme.titleSmall,
                                       ),
                                       Text(
-                                        'Author: ${post.userId}',
+                                        'Автор: ${post.userId}',
                                         style: Theme.of(
                                           context,
                                         ).textTheme.bodySmall,
@@ -104,7 +118,7 @@ class _PostProviderDetailPageState extends State<PostProviderDetailPage> {
                 ),
               );
             case PostsStatus.initial:
-              return const Center(child: Text('Loading...'));
+              return const Center(child: Text('Загружается...'));
           }
         },
       ),
@@ -113,8 +127,10 @@ class _PostProviderDetailPageState extends State<PostProviderDetailPage> {
 
   @override
   void dispose() {
-    // Clear selected post when closing the page
-    context.read<PostsProvider>().clearSelectedPost();
+    // Безопасно очищаем выбранный пост используя сохраненную ссылку
+    if (_postsProvider != null) {
+      _postsProvider!.clearSelectedPost();
+    }
     super.dispose();
   }
 }

@@ -52,7 +52,8 @@ lib/
 
 ## 🔧 Technologies Used
 
-### Core Dependencies:
+### Core Dependencies
+
 - **Flutter** - UI framework
 - **Provider** - Simple state management
 - **Dio** - HTTP client for API requests
@@ -68,6 +69,7 @@ lib/
 The Provider pattern uses `ChangeNotifier` to manage state:
 
 #### 1. PostsProvider (posts_provider.dart)
+
 ```dart
 enum PostsStatus { initial, loading, loaded, error }
 
@@ -112,7 +114,7 @@ class PostsProvider extends ChangeNotifier {
 
 ## 🎯 Provider Patterns
 
-### ✅ Consumer for listening to changes:
+### ✅ Consumer for listening to changes
 
 ```dart
 Consumer<PostsProvider>(
@@ -131,7 +133,7 @@ Consumer<PostsProvider>(
 )
 ```
 
-### ✅ Provider access methods:
+### ✅ Provider access methods
 
 ```dart
 // Reading state (causes rebuild)
@@ -144,7 +146,7 @@ context.read<PostsProvider>().fetchPosts();
 final provider = Provider.of<PostsProvider>(context);
 ```
 
-### ✅ ChangeNotifierProvider setup:
+### ✅ ChangeNotifierProvider setup
 
 ```dart
 ChangeNotifierProvider<PostsProvider>(
@@ -166,28 +168,33 @@ ChangeNotifierProvider<PostsProvider>(
 ## 🚀 Getting Started
 
 1. Install dependencies:
+
 ```bash
 flutter pub get
 ```
 
 2. Generate code for JSON serialization:
+
 ```bash
 dart run build_runner build
 ```
 
 3. Run the application:
+
 ```bash
 flutter run
 ```
 
 ## 📝 Key Provider Files
 
-### Provider State Management:
+### Provider State Management
+
 - `lib/features/posts/presentation/providers/posts_provider.dart` - Main Provider logic
 - `lib/features/posts/presentation/pages/posts_provider_page.dart` - Main page with Consumer
 - `lib/features/posts/presentation/pages/post_provider_detail_page.dart` - Post details page
 
-### Main Application:
+### Main Application
+
 - `lib/main.dart` - ChangeNotifierProvider setup
 
 ## 🎯 Learning Objectives
@@ -228,6 +235,7 @@ After studying this branch you will understand:
 ## 🎯 Provider Core Concepts
 
 ### 1. **ChangeNotifier** - Notifies listeners about changes
+
 ```dart
 class PostsProvider extends ChangeNotifier {
   void updateState() {
@@ -238,6 +246,7 @@ class PostsProvider extends ChangeNotifier {
 ```
 
 ### 2. **Consumer** - Listens to provider changes
+
 ```dart
 Consumer<PostsProvider>(
   builder: (context, provider, child) => Widget(),
@@ -245,11 +254,13 @@ Consumer<PostsProvider>(
 ```
 
 ### 3. **context.watch()** - Listens to changes
+
 ```dart
 final posts = context.watch<PostsProvider>().posts;
 ```
 
 ### 4. **context.read()** - Accesses provider without listening
+
 ```dart
 context.read<PostsProvider>().fetchPosts();
 ```
@@ -257,6 +268,7 @@ context.read<PostsProvider>().fetchPosts();
 ## 🔗 API
 
 Uses **JSONPlaceholder API**:
+
 - Base URL: `https://jsonplaceholder.typicode.com`
 - Endpoints:
   - `GET /posts` - List of all posts
