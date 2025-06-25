@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 void demonstrateClasses() {
   print('=== Dart Classes and OOP Basics ===\n');
 
@@ -87,11 +89,10 @@ class Student extends Person {
   double? grade;
 
   // Default constructor
-  Student(String name, int age, this.major) : super(name, age);
+  Student(super.name, super.age, this.major);
 
   // Named constructor
-  Student.withGrade(String name, int age, this.major, this.grade)
-    : super(name, age);
+  Student.withGrade(super.name, super.age, this.major, this.grade);
 
   // Factory constructor
   factory Student.graduate(String name, int age, String major) {
@@ -116,7 +117,7 @@ class Employee extends Person {
   String position;
   double salary;
 
-  Employee(String name, int age, this.position, this.salary) : super(name, age);
+  Employee(super.name, super.age, this.position, this.salary);
 
   void work() {
     print('$name is working as a $position.');
@@ -186,7 +187,7 @@ mixin Swimming {
 }
 
 class Swimmer extends Person with Swimming {
-  Swimmer(String name, int age) : super(name, age);
+  Swimmer(super.name, super.age);
 }
 
 // Class with getters and setters

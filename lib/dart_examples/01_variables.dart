@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 void demonstrateVariables() {
   print('=== Dart Variables and Data Types Basics ===\n');
 
@@ -43,12 +45,7 @@ void demonstrateVariables() {
   // Collections
   List<String> fruits = ['Apple', 'Banana', 'Orange'];
   Map<String, int> scores = {'Alice': 95, 'Bob': 87, 'Charlie': 92};
-  Set<String> uniqueColors = {
-    'Red',
-    'Green',
-    'Blue',
-    'Red',
-  }; // Duplicates removed
+  Set<String> uniqueColors = {'Red', 'Green', 'Blue', 'Yellow'};
 
   print('Collections:');
   print('List<String> fruits = $fruits');

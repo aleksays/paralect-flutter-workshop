@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 void demonstrateFunctions() {
   print('=== Dart Functions Basics ===\n');
 
@@ -52,10 +54,10 @@ void demonstrateFunctions() {
 
   // Arrow functions
   print('\n8. Arrow Functions:');
-  var square = (int x) => x * x;
+  square(int x) => x * x;
   print('Square of 4: ${square(4)}');
 
-  var isEven = (int x) => x % 2 == 0;
+  isEven(int x) => x % 2 == 0;
   print('Is 7 even? ${isEven(7)}');
   print('Is 8 even? ${isEven(8)}');
 }
