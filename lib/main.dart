@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/injection/injection_container.dart' as di;
-import 'features/posts/presentation/bloc/posts_bloc.dart';
-import 'features/posts/presentation/pages/posts_page.dart';
+import 'features/posts/presentation/pages/posts_riverpod_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await di.init();
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -16,15 +15,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Workshop - Clean Architecture',
+      title: 'Flutter Workshop - Clean Architecture + Riverpod',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.purple),
         useMaterial3: true,
       ),
-      home: BlocProvider(
-        create: (_) => di.sl<PostsBloc>(),
-        child: const PostsPage(),
-      ),
+      home: const PostsRiverpodPage(),
     );
   }
 }

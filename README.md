@@ -1,12 +1,12 @@
-# Flutter Workshop: REST API + Clean Architecture
+# Flutter Workshop: REST API + Clean Architecture + Riverpod
 
-## Ветка: 03-rest-api-futurebuilder
+## Ветка: 05-rest-api-riverpod
 
-Эта ветка демонстрирует реализацию REST API с использованием **Clean Architecture** в Flutter приложении.
+Эта ветка демонстрирует реализацию REST API с использованием **Clean Architecture** и **Riverpod** для state management в Flutter приложении.
 
 ## 🏗️ Архитектура
 
-Проект организован согласно принципам Clean Architecture с разделением на три основных слоя:
+Проект организован согласно принципам Clean Architecture с **Riverpod** в качестве современного solution для управления состоянием.
 
 ### 📁 Структура проекта
 
@@ -17,7 +17,6 @@ lib/
 │   │   └── failures.dart              # Базовые классы ошибок
 │   ├── injection/
 │   │   └── injection_container.dart   # Dependency Injection
-│   ├── network/
 │   └── usecases/
 │       └── usecase.dart               # Базовый интерфейс UseCase
 ├── features/
@@ -39,13 +38,11 @@ lib/
 │       │       ├── get_post.dart
 │       │       └── get_posts.dart
 │       └── presentation/
-│           ├── bloc/
-│           │   ├── posts_bloc.dart
-│           │   ├── posts_event.dart
-│           │   └── posts_state.dart
+│           ├── providers/              # Riverpod Providers
+│           │   └── posts_providers.dart
 │           ├── pages/
-│           │   ├── posts_page.dart
-│           │   └── post_detail_page.dart
+│           │   ├── posts_riverpod_page.dart
+│           │   └── post_riverpod_detail_page.dart
 │           └── widgets/
 │               ├── error_widget.dart
 │               ├── loading_widget.dart
@@ -57,52 +54,100 @@ lib/
 
 ### Основные зависимости:
 - **Flutter** - UI фреймворк
+- **Riverpod** - Современный state management
 - **Dio** - HTTP клиент для API запросов
-- **flutter_bloc** - State management
 - **get_it** - Dependency injection
 - **dartz** - Функциональное программирование (Either)
 - **equatable** - Сравнение объектов
 - **json_annotation** - JSON сериализация
 
-### Dev зависимости:
-- **json_serializable** - Генерация JSON кода
-- **build_runner** - Генератор кода
+## 🏛️ Riverpod State Management
 
-## 🏛️ Слои архитектуры
+### 📊 Riverpod Providers
 
-### 1. Domain Layer (Бизнес-логика)
-- **Entities** - Основные сущности бизнес-логики
-- **Repositories** - Интерфейсы для получения данных
-- **Use Cases** - Конкретные случаи использования
+Файл `posts_providers.dart` содержит различные типы провайдеров:
 
-### 2. Data Layer (Данные)
-- **Models** - Модели данных с JSON сериализацией
-- **Data Sources** - Источники данных (API, база данных)
-- **Repository Implementations** - Реализация интерфейсов репозиториев
+#### 1. Use Cases Providers
+```dart
+final getPostsProvider = Provider<GetPosts>((ref) => di.sl<GetPosts>());
+final getPostProvider = Provider<GetPost>((ref) => di.sl<GetPost>());
+```
 
-### 3. Presentation Layer (Представление)
-- **BLoC** - Управление состоянием
-- **Pages** - Экраны приложения
-- **Widgets** - Переиспользуемые компоненты UI
+#### 2. FutureProvider для простых асинхронных операций
+```dart
+final postsProvider = FutureProvider<List<Post>>((ref) async {
+  final getPosts = ref.watch(getPostsProvider);
+  final result = await getPosts(const NoParams());
+  
+  return result.fold(
+    (failure) => throw Exception(failure.message),
+    (posts) => posts,
+  );
+});
+```
 
-## 🔄 Принципы Clean Architecture
+#### 3. StateNotifierProvider для сложного state management
+```dart
+class PostsNotifier extends StateNotifier<AsyncValue<List<Post>>> {
+  Future<void> fetchPosts() async {
+    state = const AsyncValue.loading();
+    // Логика загрузки...
+  }
+}
 
-### ✅ Что демонстрирует эта ветка:
+final postsNotifierProvider = StateNotifierProvider<PostsNotifier, AsyncValue<List<Post>>>((ref) {
+  return PostsNotifier(ref.watch(getPostsProvider));
+});
+```
 
-1. **Разделение ответственности**: Каждый слой имеет свою ответственность
-2. **Инверсия зависимостей**: Domain слой не зависит от внешних фреймворков
-3. **Тестируемость**: Легко тестировать каждый слой независимо
-4. **Независимость от UI**: Бизнес-логика не зависит от UI
-5. **Независимость от фреймворков**: Clean architecture не привязана к Flutter
+## 🎯 Riverpod паттерны
 
-### 📱 Функциональность:
+### ✅ ConsumerWidget для доступа к ref:
+
+```dart
+class PostsRiverpodPage extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final postsAsync = ref.watch(postsNotifierProvider);
+    
+    return postsAsync.when(
+      loading: () => LoadingWidget(),
+      data: (posts) => PostsList(posts),
+      error: (error, stack) => ErrorWidget(error),
+    );
+  }
+}
+```
+
+### ✅ AsyncValue.when() для обработки состояний:
+
+```dart
+postsAsync.when(
+  loading: () => CircularProgressIndicator(),
+  data: (posts) => ListView.builder(...),
+  error: (error, stackTrace) => ErrorWidget(),
+)
+```
+
+### ✅ Чтение и модификация состояния:
+
+```dart
+// Чтение состояния
+final posts = ref.watch(postsProvider);
+
+// Запуск действий
+ref.read(postsNotifierProvider.notifier).fetchPosts();
+```
+
+## 📱 Функциональность
 
 - ✅ Загрузка списка постов из JSONPlaceholder API
 - ✅ Детальный просмотр поста
-- ✅ Обработка состояний загрузки
+- ✅ Обработка состояний загрузки с Riverpod
 - ✅ Обработка ошибок с возможностью повтора
-- ✅ Clean Architecture с BLoC pattern
+- ✅ Clean Architecture с Riverpod pattern
 - ✅ Dependency Injection
+- ✅ FutureProvider и StateNotifier patterns
 
 ## 🚀 Запуск
 
@@ -121,33 +166,72 @@ dart run build_runner build
 flutter run
 ```
 
-## 📝 Основные файлы
+## 📝 Основные файлы Riverpod
 
-### Domain Layer:
-- `lib/features/posts/domain/entities/post.dart` - Entity поста
-- `lib/features/posts/domain/usecases/get_posts.dart` - Use case для получения списка постов
-- `lib/features/posts/domain/usecases/get_post.dart` - Use case для получения одного поста
+### Riverpod State Management:
+- `lib/features/posts/presentation/providers/posts_providers.dart` - Все Riverpod провайдеры
+- `lib/features/posts/presentation/pages/posts_riverpod_page.dart` - Главная страница с ConsumerWidget
+- `lib/features/posts/presentation/pages/post_riverpod_detail_page.dart` - Страница деталей поста
 
-### Data Layer:
-- `lib/features/posts/data/models/post_model.dart` - Модель поста с JSON сериализацией
-- `lib/features/posts/data/datasources/posts_remote_data_source.dart` - Источник данных API
-
-### Presentation Layer:
-- `lib/features/posts/presentation/bloc/posts_bloc.dart` - BLoC для управления состоянием
-- `lib/features/posts/presentation/pages/posts_page.dart` - Главная страница со списком постов
+### Main Application:
+- `lib/main.dart` - ProviderScope и настройка Riverpod
 
 ## 🎯 Цели обучения
 
 После изучения этой ветки вы поймете:
 
-1. ✅ **Clean Architecture принципы**
-2. ✅ **Разделение на слои**
-3. ✅ **Dependency Injection**
-4. ✅ **Use Cases паттерн**
-5. ✅ **Repository паттерн**
-6. ✅ **BLoC State Management**
-7. ✅ **Error Handling**
-8. ✅ **Code Generation**
+1. ✅ **Riverpod State Management**
+2. ✅ **Provider, FutureProvider, StateNotifierProvider**
+3. ✅ **ConsumerWidget и ConsumerStatefulWidget**
+4. ✅ **AsyncValue и .when() метод**
+5. ✅ **ref.watch() и ref.read()**
+6. ✅ **ProviderScope для DI**
+7. ✅ **State management с Clean Architecture**
+8. ✅ **Family providers для параметров**
+
+## 🔄 Riverpod vs Provider vs BLoC
+
+| Аспект | Riverpod | Provider | BLoC |
+|--------|----------|----------|------|
+| **Безопасность типов** | ✅ Compile-time | ❌ Runtime | ✅ Compile-time |
+| **Простота** | ✅ Очень простой | ✅ Простой | ❌ Сложный |
+| **Performance** | ✅ Отличный | ✅ Хороший | ✅ Отличный |
+| **Testing** | ✅ Легко | ✅ Легко | ✅ Легко |
+| **DevTools** | ✅ Отличные | ❌ Ограниченные | ✅ Отличные |
+| **Async** | ✅ AsyncValue | ❌ Manual | ✅ Stream |
+| **Dependencies** | ✅ Автоматические | ❌ Manual | ❌ Manual |
+
+## 📚 Riverpod преимущества
+
+- 🔒 **Type Safety** - Compile-time проверки
+- 🚀 **Performance** - Автоматическая оптимизация
+- 🧪 **Testability** - Легкое тестирование и моки
+- 🔄 **Reactive** - Автоматическое обновление зависимостей
+- 🛠️ **DevTools** - Отличная отладка
+- 📱 **No Context** - Не нужен BuildContext
+- 🔧 **Clean API** - Интуитивный и простой API
+
+## 🎯 Riverpod Provider Types
+
+### 1. **Provider** - Для неизменяемых данных
+```dart
+final configProvider = Provider((ref) => Config());
+```
+
+### 2. **FutureProvider** - Для асинхронных операций  
+```dart
+final userProvider = FutureProvider((ref) async => api.getUser());
+```
+
+### 3. **StateProvider** - Для простого состояния
+```dart
+final counterProvider = StateProvider((ref) => 0);
+```
+
+### 4. **StateNotifierProvider** - Для сложного состояния
+```dart
+final todosProvider = StateNotifierProvider<TodosNotifier, List<Todo>>((ref) => TodosNotifier());
+```
 
 ## 🔗 API
 
@@ -159,11 +243,12 @@ flutter run
 
 ## 📚 Дополнительные ресурсы
 
+- [Riverpod Documentation](https://riverpod.dev/)
+- [Riverpod vs Provider](https://riverpod.dev/docs/concepts/why_riverpod)
+- [Flutter State Management](https://flutter.dev/docs/development/data-and-backend/state-mgmt)
 - [Clean Architecture - Uncle Bob](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
-- [Flutter BLoC Documentation](https://bloclibrary.dev/)
 - [JSONPlaceholder API](https://jsonplaceholder.typicode.com/)
-- [Dependency Injection in Flutter](https://pub.dev/packages/get_it)
 
 ---
 
-🎉 **Поздравляем!** Вы изучили реализацию Clean Architecture в Flutter!
+🎉 **Поздравляем!** Вы изучили реализацию Clean Architecture с Riverpod в Flutter!
