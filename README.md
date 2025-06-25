@@ -1,12 +1,12 @@
-# Flutter Workshop: REST API + Clean Architecture
+# Flutter Workshop: REST API + Clean Architecture + Provider
 
-## Ветка: 03-rest-api-futurebuilder
+## Ветка: 04-rest-api-provider
 
-Эта ветка демонстрирует реализацию REST API с использованием **Clean Architecture** в Flutter приложении.
+Эта ветка демонстрирует реализацию REST API с использованием **Clean Architecture** и **Provider** для state management в Flutter приложении.
 
 ## 🏗️ Архитектура
 
-Проект организован согласно принципам Clean Architecture с разделением на три основных слоя:
+Проект организован согласно принципам Clean Architecture с **Provider** в качестве solution для управления состоянием.
 
 ### 📁 Структура проекта
 
@@ -17,7 +17,6 @@ lib/
 │   │   └── failures.dart              # Базовые классы ошибок
 │   ├── injection/
 │   │   └── injection_container.dart   # Dependency Injection
-│   ├── network/
 │   └── usecases/
 │       └── usecase.dart               # Базовый интерфейс UseCase
 ├── features/
@@ -39,13 +38,11 @@ lib/
 │       │       ├── get_post.dart
 │       │       └── get_posts.dart
 │       └── presentation/
-│           ├── bloc/
-│           │   ├── posts_bloc.dart
-│           │   ├── posts_event.dart
-│           │   └── posts_state.dart
+│           ├── providers/              # Provider State Management
+│           │   └── posts_provider.dart
 │           ├── pages/
-│           │   ├── posts_page.dart
-│           │   └── post_detail_page.dart
+│           │   ├── posts_provider_page.dart
+│           │   └── post_provider_detail_page.dart
 │           └── widgets/
 │               ├── error_widget.dart
 │               ├── loading_widget.dart
@@ -57,51 +54,80 @@ lib/
 
 ### Основные зависимости:
 - **Flutter** - UI фреймворк
+- **Provider** - State management solution
 - **Dio** - HTTP клиент для API запросов
-- **flutter_bloc** - State management
 - **get_it** - Dependency injection
 - **dartz** - Функциональное программирование (Either)
 - **equatable** - Сравнение объектов
 - **json_annotation** - JSON сериализация
 
-### Dev зависимости:
-- **json_serializable** - Генерация JSON кода
-- **build_runner** - Генератор кода
+## 🏛️ Provider State Management
 
-## 🏛️ Слои архитектуры
+### 📊 PostsProvider
 
-### 1. Domain Layer (Бизнес-логика)
-- **Entities** - Основные сущности бизнес-логики
-- **Repositories** - Интерфейсы для получения данных
-- **Use Cases** - Конкретные случаи использования
+Provider класс который управляет состоянием постов:
 
-### 2. Data Layer (Данные)
-- **Models** - Модели данных с JSON сериализацией
-- **Data Sources** - Источники данных (API, база данных)
-- **Repository Implementations** - Реализация интерфейсов репозиториев
+```dart
+class PostsProvider extends ChangeNotifier {
+  PostsStatus _status = PostsStatus.initial;
+  List<Post> _posts = [];
+  Post? _selectedPost;
+  String _errorMessage = '';
 
-### 3. Presentation Layer (Представление)
-- **BLoC** - Управление состоянием
-- **Pages** - Экраны приложения
-- **Widgets** - Переиспользуемые компоненты UI
+  Future<void> fetchPosts() async {
+    _status = PostsStatus.loading;
+    notifyListeners();
+    
+    final result = await _getPosts(const NoParams());
+    // Обработка результата...
+    notifyListeners();
+  }
+}
+```
 
-## 🔄 Принципы Clean Architecture
+### 🔄 Состояния Provider
 
-### ✅ Что демонстрирует эта ветка:
+```dart
+enum PostsStatus { 
+  initial, 
+  loading, 
+  loaded, 
+  error 
+}
+```
 
-1. **Разделение ответственности**: Каждый слой имеет свою ответственность
-2. **Инверсия зависимостей**: Domain слой не зависит от внешних фреймворков
-3. **Тестируемость**: Легко тестировать каждый слой независимо
-4. **Независимость от UI**: Бизнес-логика не зависит от UI
-5. **Независимость от фреймворков**: Clean architecture не привязана к Flutter
+## 🎯 Provider паттерны
 
-### 📱 Функциональность:
+### ✅ Consumer для слушания изменений:
+
+```dart
+Consumer<PostsProvider>(
+  builder: (context, postsProvider, child) {
+    switch (postsProvider.status) {
+      case PostsStatus.loading:
+        return LoadingWidget();
+      case PostsStatus.loaded:
+        return PostsList(postsProvider.posts);
+      case PostsStatus.error:
+        return ErrorWidget(postsProvider.errorMessage);
+    }
+  },
+)
+```
+
+### ✅ Запуск действий через Provider:
+
+```dart
+context.read<PostsProvider>().fetchPosts();
+```
+
+## 📱 Функциональность
 
 - ✅ Загрузка списка постов из JSONPlaceholder API
 - ✅ Детальный просмотр поста
-- ✅ Обработка состояний загрузки
+- ✅ Обработка состояний загрузки с Provider
 - ✅ Обработка ошибок с возможностью повтора
-- ✅ Clean Architecture с BLoC pattern
+- ✅ Clean Architecture с Provider pattern
 - ✅ Dependency Injection
 
 ## 🚀 Запуск
@@ -121,33 +147,45 @@ dart run build_runner build
 flutter run
 ```
 
-## 📝 Основные файлы
+## 📝 Основные файлы Provider
 
-### Domain Layer:
-- `lib/features/posts/domain/entities/post.dart` - Entity поста
-- `lib/features/posts/domain/usecases/get_posts.dart` - Use case для получения списка постов
-- `lib/features/posts/domain/usecases/get_post.dart` - Use case для получения одного поста
+### Provider State Management:
+- `lib/features/posts/presentation/providers/posts_provider.dart` - Provider для управления состоянием
+- `lib/features/posts/presentation/pages/posts_provider_page.dart` - Главная страница с Consumer
+- `lib/features/posts/presentation/pages/post_provider_detail_page.dart` - Страница деталей поста
 
-### Data Layer:
-- `lib/features/posts/data/models/post_model.dart` - Модель поста с JSON сериализацией
-- `lib/features/posts/data/datasources/posts_remote_data_source.dart` - Источник данных API
-
-### Presentation Layer:
-- `lib/features/posts/presentation/bloc/posts_bloc.dart` - BLoC для управления состоянием
-- `lib/features/posts/presentation/pages/posts_page.dart` - Главная страница со списком постов
+### Dependency Injection:
+- `lib/core/injection/injection_container.dart` - Регистрация PostsProvider
 
 ## 🎯 Цели обучения
 
 После изучения этой ветки вы поймете:
 
-1. ✅ **Clean Architecture принципы**
-2. ✅ **Разделение на слои**
-3. ✅ **Dependency Injection**
-4. ✅ **Use Cases паттерн**
-5. ✅ **Repository паттерн**
-6. ✅ **BLoC State Management**
-7. ✅ **Error Handling**
-8. ✅ **Code Generation**
+1. ✅ **Provider State Management**
+2. ✅ **ChangeNotifier паттерн**
+3. ✅ **Consumer виджет**
+4. ✅ **Context.read() и Context.watch()**
+5. ✅ **State management с Clean Architecture**
+6. ✅ **Provider dependency injection**
+7. ✅ **Lifecycle management в Provider**
+
+## 🔄 Provider vs BLoC
+
+| Аспект | Provider | BLoC |
+|--------|----------|------|
+| **Простота** | ✅ Простой в изучении | ❌ Больше boilerplate кода |
+| **Events** | ❌ Методы напрямую | ✅ Отдельные Event классы |
+| **States** | ❌ Enum состояния | ✅ Отдельные State классы |
+| **Реактивность** | ✅ ChangeNotifier | ✅ Stream/Bloc |
+| **Тестирование** | ✅ Легко тестировать | ✅ Легко тестировать |
+
+## 📚 Provider преимущества
+
+- 🚀 **Простота** - Легко изучить и использовать
+- 🔄 **Реактивность** - Автоматическое обновление UI
+- 💡 **Гибкость** - Можно использовать с любыми классами
+- 🎯 **Performance** - Оптимизация перерисовки
+- 🔧 **DI friendly** - Легко интегрируется с DI
 
 ## 🔗 API
 
@@ -159,11 +197,11 @@ flutter run
 
 ## 📚 Дополнительные ресурсы
 
+- [Provider Documentation](https://pub.dev/packages/provider)
+- [Flutter State Management](https://flutter.dev/docs/development/data-and-backend/state-mgmt)
 - [Clean Architecture - Uncle Bob](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
-- [Flutter BLoC Documentation](https://bloclibrary.dev/)
 - [JSONPlaceholder API](https://jsonplaceholder.typicode.com/)
-- [Dependency Injection in Flutter](https://pub.dev/packages/get_it)
 
 ---
 
-🎉 **Поздравляем!** Вы изучили реализацию Clean Architecture в Flutter!
+🎉 **Поздравляем!** Вы изучили реализацию Clean Architecture с Provider в Flutter!

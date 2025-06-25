@@ -6,6 +6,7 @@ import '../../features/posts/domain/repositories/posts_repository.dart';
 import '../../features/posts/domain/usecases/get_post.dart';
 import '../../features/posts/domain/usecases/get_posts.dart';
 import '../../features/posts/presentation/bloc/posts_bloc.dart';
+import '../../features/posts/presentation/providers/posts_provider.dart';
 
 final sl = GetIt.instance;
 
@@ -13,6 +14,9 @@ Future<void> init() async {
   // Features - Posts
   // Bloc
   sl.registerFactory(() => PostsBloc(getPosts: sl(), getPost: sl()));
+
+  // Provider
+  sl.registerFactory(() => PostsProvider(getPosts: sl(), getPost: sl()));
 
   // Use cases
   sl.registerLazySingleton(() => GetPosts(sl()));

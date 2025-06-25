@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'core/injection/injection_container.dart' as di;
-import 'features/posts/presentation/bloc/posts_bloc.dart';
-import 'features/posts/presentation/pages/posts_page.dart';
+import 'features/posts/presentation/providers/posts_provider.dart';
+import 'features/posts/presentation/pages/posts_provider_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,14 +16,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Workshop - Clean Architecture',
+      title: 'Flutter Workshop - Clean Architecture + Provider',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
         useMaterial3: true,
       ),
-      home: BlocProvider(
-        create: (_) => di.sl<PostsBloc>(),
-        child: const PostsPage(),
+      home: ChangeNotifierProvider(
+        create: (_) => di.sl<PostsProvider>(),
+        child: const PostsProviderPage(),
       ),
     );
   }
