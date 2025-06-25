@@ -18,17 +18,16 @@ This workshop is organized into branches, each demonstrating different aspects o
 
 This workshop demonstrates **Clean Architecture** principles as defined by Robert C. Martin (Uncle Bob). The architecture is divided into three main layers:
 
-```
-┌─────────────────────────────────────────┐
-│           Presentation Layer            │
-│  (UI, Widgets, State Management)        │
-├─────────────────────────────────────────┤
-│            Domain Layer                 │
-│     (Entities, Use Cases)               │
-├─────────────────────────────────────────┤
-│             Data Layer                  │
-│  (Repositories, Data Sources, Models)   │
-└─────────────────────────────────────────┘
+```┌─────────────────────────────────────────┐
+   │           Presentation Layer            │
+   │  (UI, Widgets, State Management)        │
+   ├─────────────────────────────────────────┤
+   │            Domain Layer                 │
+   │     (Entities, Use Cases)               │
+   ├─────────────────────────────────────────┤
+   │             Data Layer                  │
+   │  (Repositories, Data Sources, Models)   │
+   └─────────────────────────────────────────┘
 ```
 
 ### 🎯 Architecture Benefits
@@ -112,12 +111,14 @@ Each branch contains:
 ### Quick Start
 
 1. **Clone the repository:**
+
    ```bash
    git clone <repository-url>
    cd paralect_flutter_workshop
    ```
 
 2. **Choose a branch to explore:**
+
    ```bash
    # For Dart basics
    git checkout 01-dart-basics
@@ -133,11 +134,13 @@ Each branch contains:
    ```
 
 3. **Install dependencies:**
+
    ```bash
    flutter pub get
    ```
 
 4. **Run the app:**
+
    ```bash
    flutter run
    ```
@@ -170,4 +173,4 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ---
 
-**Happy Learning! 🎉**
+***Happy Learning! 🎉***
