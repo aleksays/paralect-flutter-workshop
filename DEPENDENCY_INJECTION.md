@@ -1,6 +1,7 @@
 # Dependency Injection in Flutter
 
 ## Table of Contents
+
 - [What is Dependency Injection?](#what-is-dependency-injection)
 - [Problems without DI](#problems-without-di)
 - [Benefits of Dependency Injection](#benefits-of-dependency-injection)
@@ -16,7 +17,9 @@
 **Dependency Injection (DI)** is a design pattern that allows objects to receive their dependencies from external sources rather than creating them internally. It's a form of **Inversion of Control (IoC)** where the control of dependency creation is inverted from the object itself to an external entity.
 
 ### Core Concept
+
 Instead of a class creating its own dependencies:
+
 ```dart
 class OrderService {
   final PaymentService _paymentService = PaymentService(); // ❌ Tight coupling
@@ -24,6 +27,7 @@ class OrderService {
 ```
 
 Dependencies are injected from outside:
+
 ```dart
 class OrderService {
   final PaymentService _paymentService;
@@ -35,6 +39,7 @@ class OrderService {
 ## Problems without DI
 
 ### 1. **Tight Coupling**
+
 ```dart
 // ❌ BAD: Hard dependencies
 class PostsBloc {
@@ -57,6 +62,7 @@ class PostsBloc {
 ```
 
 ### 2. **Difficult Testing**
+
 ```dart
 // ❌ BAD: Cannot mock dependencies
 class PostsRepository {
@@ -71,6 +77,7 @@ class PostsRepository {
 ```
 
 ### 3. **Configuration Issues**
+
 ```dart
 // ❌ BAD: Hard-coded configuration
 class ApiClient {
@@ -82,6 +89,7 @@ class ApiClient {
 ```
 
 ### 4. **Object Lifecycle Problems**
+
 ```dart
 // ❌ BAD: Multiple instances created
 class ServiceA {
@@ -96,26 +104,31 @@ class ServiceB {
 ## Benefits of Dependency Injection
 
 ### 1. **Loose Coupling**
+
 - Classes depend on abstractions, not concrete implementations
 - Easy to swap implementations
 - Better separation of concerns
 
 ### 2. **Improved Testability**
+
 - Easy to inject mock objects for testing
 - Isolated unit tests
 - Fast and reliable test execution
 
 ### 3. **Better Configuration Management**
+
 - Centralized dependency configuration
 - Environment-specific setups (dev, staging, production)
 - Feature flags and A/B testing support
 
 ### 4. **Object Lifecycle Control**
+
 - Singleton pattern for shared resources
 - Factory pattern for new instances
 - Lazy initialization for performance
 
 ### 5. **Maintainability**
+
 - Clear dependency graphs
 - Easier refactoring
 - Better code organization
@@ -123,23 +136,27 @@ class ServiceB {
 ## DI Libraries in Flutter
 
 ### 1. **get_it** (Service Locator Pattern)
+
 ```yaml
 dependencies:
   get_it: ^7.6.4
 ```
 
 **Pros:**
+
 - Simple and lightweight
 - No code generation required
 - Global access pattern
 - Supports different registration types
 
 **Cons:**
+
 - Not compile-time safe
 - Global state can be problematic
 - Runtime dependency resolution
 
 ### 2. **injectable** (with get_it)
+
 ```yaml
 dependencies:
   get_it: ^7.6.4
@@ -151,42 +168,50 @@ dev_dependencies:
 ```
 
 **Pros:**
+
 - Code generation for type safety
 - Annotation-based registration
 - Works with get_it under the hood
 
 **Cons:**
+
 - Requires code generation
 - More complex setup
 
 ### 3. **Provider** (InheritedWidget-based)
+
 ```yaml
 dependencies:
   provider: ^6.1.1
 ```
 
 **Pros:**
+
 - Built on Flutter's InheritedWidget
 - Tree-scoped dependencies
 - No global state
 
 **Cons:**
+
 - Requires BuildContext
 - More boilerplate for deep dependency graphs
 
 ### 4. **Riverpod** (Modern Provider)
+
 ```yaml
 dependencies:
   flutter_riverpod: ^2.4.9
 ```
 
 **Pros:**
+
 - Compile-time safety
 - No BuildContext required
 - Automatic dependency disposal
 - Excellent DevTools support
 
 **Cons:**
+
 - Learning curve for Provider users
 - Newer ecosystem
 
@@ -212,6 +237,7 @@ final repository = sl<UserRepository>();
 ### Registration Types
 
 #### 1. **Factory** - New instance every time
+
 ```dart
 sl.registerFactory<UserBloc>(() => UserBloc(
   getUserUseCase: sl(),
@@ -224,6 +250,7 @@ final bloc2 = sl<UserBloc>(); // Another new instance
 ```
 
 #### 2. **LazySingleton** - Single instance, created on first access
+
 ```dart
 sl.registerLazySingleton<DatabaseService>(() => DatabaseService());
 
@@ -233,6 +260,7 @@ final db2 = sl<DatabaseService>(); // Returns same instance
 ```
 
 #### 3. **Singleton** - Single instance, created immediately
+
 ```dart
 final apiClient = ApiClient();
 sl.registerSingleton<ApiClient>(apiClient);
@@ -241,6 +269,7 @@ sl.registerSingleton<ApiClient>(apiClient);
 ```
 
 #### 4. **Factory with Parameter**
+
 ```dart
 sl.registerFactoryParam<UserRepository, String, void>(
   (baseUrl, _) => UserRepository(baseUrl: baseUrl),
@@ -253,7 +282,8 @@ final repo = sl<UserRepository>(param1: 'https://api.example.com');
 ## Implementation in Clean Architecture
 
 ### Project Structure
-```
+
+```markdawn
 lib/
 ├── core/
 │   └── injection/
@@ -271,7 +301,8 @@ lib/
 ```
 
 ### Dependency Graph
-```
+
+```markdawn
 ┌─────────────┐    ┌──────────────┐    ┌─────────────────┐
 │  PostsBloc  │───▶│  GetPosts    │───▶│ PostsRepository │
 │             │    │  UseCase     │    │   (Interface)   │
@@ -429,6 +460,7 @@ class MockDio extends Mock implements Dio {}
 ## Best Practices
 
 ### 1. **Register Dependencies in Correct Order**
+
 ```dart
 Future<void> init() async {
   // 1. External dependencies first (lowest level)
@@ -453,6 +485,7 @@ Future<void> init() async {
 ```
 
 ### 2. **Use Interfaces/Abstract Classes**
+
 ```dart
 // ✅ GOOD: Register with interface type
 sl.registerLazySingleton<PostsRepository>(
@@ -466,6 +499,7 @@ sl.registerLazySingleton<PostsRepositoryImpl>(
 ```
 
 ### 3. **Choose Appropriate Registration Types**
+
 ```dart
 // Singletons for shared resources
 sl.registerLazySingleton(() => Dio());
@@ -477,6 +511,7 @@ sl.registerFactory(() => UserBloc(getUser: sl()));
 ```
 
 ### 4. **Environment-Specific Configuration**
+
 ```dart
 Future<void> init({bool isProduction = false}) async {
   sl.registerLazySingleton(() => Dio(BaseOptions(
@@ -488,6 +523,7 @@ Future<void> init({bool isProduction = false}) async {
 ```
 
 ### 5. **Avoid Circular Dependencies**
+
 ```dart
 // ❌ BAD: Circular dependency
 class ServiceA {
@@ -511,6 +547,7 @@ class ServiceB {
 ## Examples
 
 ### Example 1: Simple Service Registration
+
 ```dart
 // Service interface
 abstract class StorageService {
@@ -540,6 +577,7 @@ await storage.save('token', 'abc123');
 ```
 
 ### Example 2: Factory with Parameters
+
 ```dart
 // Service that needs configuration
 class ApiService {
@@ -560,6 +598,7 @@ final stagingApi = sl<ApiService>(param1: 'https://api.staging.com');
 ```
 
 ### Example 3: Complex Dependency Graph
+
 ```dart
 Future<void> init() async {
   // Core services
@@ -599,6 +638,7 @@ Future<void> init() async {
 ## Conclusion
 
 Dependency Injection is a powerful pattern that promotes:
+
 - **Loose coupling** between components
 - **Better testability** with mock objects
 - **Improved maintainability** and refactoring
@@ -606,4 +646,4 @@ Dependency Injection is a powerful pattern that promotes:
 
 The **get_it** library provides a simple and effective Service Locator implementation for Flutter applications, making it easy to manage dependencies in Clean Architecture projects.
 
-For more complex scenarios, consider using **injectable** with code generation or **Riverpod** for a more modern approach to dependency management. 
+For more complex scenarios, consider using **injectable** with code generation or **Riverpod** for a more modern approach to dependency management.

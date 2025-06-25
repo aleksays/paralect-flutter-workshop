@@ -10,7 +10,7 @@ The project is organized according to Clean Architecture principles with **BLoC*
 
 ### 📁 Project Structure
 
-```
+```markdawn
 lib/
 ├── core/
 │   ├── error/
@@ -54,7 +54,8 @@ lib/
 
 ## 🔧 Technologies Used
 
-### Core Dependencies:
+### Core Dependencies
+
 - **Flutter** - UI framework
 - **BLoC** - Proven state management
 - **Dio** - HTTP client for API requests
@@ -70,6 +71,7 @@ lib/
 The BLoC pattern consists of three main components:
 
 #### 1. Events (posts_event.dart)
+
 ```dart
 abstract class PostsEvent extends Equatable {
   const PostsEvent();
@@ -86,6 +88,7 @@ class GetPostEvent extends PostsEvent {
 ```
 
 #### 2. States (posts_state.dart)
+
 ```dart
 abstract class PostsState extends Equatable {
   const PostsState();
@@ -102,6 +105,7 @@ class PostsError extends PostsState {
 ```
 
 #### 3. BLoC (posts_bloc.dart)
+
 ```dart
 class PostsBloc extends Bloc<PostsEvent, PostsState> {
   final GetPosts getPosts;
@@ -117,7 +121,7 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
 
 ## 🎯 BLoC Patterns
 
-### ✅ BlocBuilder for UI updates:
+### ✅ BlocBuilder for UI updates
 
 ```dart
 BlocBuilder<PostsBloc, PostsState>(
@@ -134,7 +138,7 @@ BlocBuilder<PostsBloc, PostsState>(
 )
 ```
 
-### ✅ Event dispatching:
+### ✅ Event dispatching
 
 ```dart
 // Trigger events
@@ -142,7 +146,7 @@ context.read<PostsBloc>().add(GetPostsEvent());
 context.read<PostsBloc>().add(GetPostEvent(postId));
 ```
 
-### ✅ BlocProvider for dependency injection:
+### ✅ BlocProvider for dependency injection
 
 ```dart
 BlocProvider<PostsBloc>(
@@ -163,33 +167,39 @@ BlocProvider<PostsBloc>(
 
 ## 🚀 Getting Started
 
-1. Install dependencies:
+1.Install dependencies:
+
 ```bash
 flutter pub get
 ```
 
-2. Generate code for JSON serialization:
+2.Generate code for JSON serialization:
+
 ```bash
 dart run build_runner build
 ```
 
-3. Run the application:
+3.Run the application:
+
 ```bash
 flutter run
 ```
 
 ## 📝 Key BLoC Files
 
-### BLoC State Management:
+### BLoC State Management
+
 - `lib/features/posts/presentation/bloc/posts_bloc.dart` - Main BLoC logic
 - `lib/features/posts/presentation/bloc/posts_event.dart` - Event definitions
 - `lib/features/posts/presentation/bloc/posts_state.dart` - State definitions
 
-### Pages:
+### Pages
+
 - `lib/features/posts/presentation/pages/posts_page.dart` - Main page with BlocBuilder
 - `lib/features/posts/presentation/pages/post_detail_page.dart` - Post details page
 
-### Main Application:
+### Main Application
+
 - `lib/main.dart` - BlocProvider setup
 
 ## 🎯 Learning Objectives
@@ -230,21 +240,25 @@ After studying this branch you will understand:
 ## 🎯 BLoC Core Concepts
 
 ### 1. **Events** - User interactions or system events
+
 ```dart
 abstract class PostsEvent extends Equatable {}
 ```
 
 ### 2. **States** - Application state at any given time
+
 ```dart
 abstract class PostsState extends Equatable {}
 ```
 
 ### 3. **BLoC** - Business Logic Component
+
 ```dart
 class PostsBloc extends Bloc<PostsEvent, PostsState> {}
 ```
 
 ### 4. **Transitions** - State changes
+
 ```dart
 emit(PostsLoading());
 emit(PostsLoaded(posts));
@@ -253,6 +267,7 @@ emit(PostsLoaded(posts));
 ## 🔗 API
 
 Uses **JSONPlaceholder API**:
+
 - Base URL: `https://jsonplaceholder.typicode.com`
 - Endpoints:
   - `GET /posts` - List of all posts
