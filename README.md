@@ -1,24 +1,24 @@
 # Flutter Workshop: REST API + Clean Architecture + Riverpod
 
-## Ветка: 05-rest-api-riverpod
+## Branch: 05-rest-api-riverpod
 
-Эта ветка демонстрирует реализацию REST API с использованием **Clean Architecture** и **Riverpod** для state management в Flutter приложении.
+This branch demonstrates REST API implementation using **Clean Architecture** and **Riverpod** for state management in a Flutter application.
 
-## 🏗️ Архитектура
+## 🏗️ Architecture
 
-Проект организован согласно принципам Clean Architecture с **Riverpod** в качестве современного solution для управления состоянием.
+The project is organized according to Clean Architecture principles with **Riverpod** as a modern state management solution.
 
-### 📁 Структура проекта
+### 📁 Project Structure
 
 ```
 lib/
 ├── core/
 │   ├── error/
-│   │   └── failures.dart              # Базовые классы ошибок
+│   │   └── failures.dart              # Base error classes
 │   ├── injection/
 │   │   └── injection_container.dart   # Dependency Injection
 │   └── usecases/
-│       └── usecase.dart               # Базовый интерфейс UseCase
+│       └── usecase.dart               # Base UseCase interface
 ├── features/
 │   └── posts/
 │       ├── data/
@@ -50,22 +50,22 @@ lib/
 └── main.dart
 ```
 
-## 🔧 Используемые технологии
+## 🔧 Technologies Used
 
-### Основные зависимости:
-- **Flutter** - UI фреймворк
-- **Riverpod** - Современный state management
-- **Dio** - HTTP клиент для API запросов
+### Core Dependencies:
+- **Flutter** - UI framework
+- **Riverpod** - Modern state management
+- **Dio** - HTTP client for API requests
 - **get_it** - Dependency injection
-- **dartz** - Функциональное программирование (Either)
-- **equatable** - Сравнение объектов
-- **json_annotation** - JSON сериализация
+- **dartz** - Functional programming (Either)
+- **equatable** - Object comparison
+- **json_annotation** - JSON serialization
 
 ## 🏛️ Riverpod State Management
 
 ### 📊 Riverpod Providers
 
-Файл `posts_providers.dart` содержит различные типы провайдеров:
+The `posts_providers.dart` file contains various provider types:
 
 #### 1. Use Cases Providers
 ```dart
@@ -73,7 +73,7 @@ final getPostsProvider = Provider<GetPosts>((ref) => di.sl<GetPosts>());
 final getPostProvider = Provider<GetPost>((ref) => di.sl<GetPost>());
 ```
 
-#### 2. FutureProvider для простых асинхронных операций
+#### 2. FutureProvider for simple async operations
 ```dart
 final postsProvider = FutureProvider<List<Post>>((ref) async {
   final getPosts = ref.watch(getPostsProvider);
@@ -86,12 +86,12 @@ final postsProvider = FutureProvider<List<Post>>((ref) async {
 });
 ```
 
-#### 3. StateNotifierProvider для сложного state management
+#### 3. StateNotifierProvider for complex state management
 ```dart
 class PostsNotifier extends StateNotifier<AsyncValue<List<Post>>> {
   Future<void> fetchPosts() async {
     state = const AsyncValue.loading();
-    // Логика загрузки...
+    // Loading logic...
   }
 }
 
@@ -100,9 +100,9 @@ final postsNotifierProvider = StateNotifierProvider<PostsNotifier, AsyncValue<Li
 });
 ```
 
-## 🎯 Riverpod паттерны
+## 🎯 Riverpod Patterns
 
-### ✅ ConsumerWidget для доступа к ref:
+### ✅ ConsumerWidget for accessing ref:
 
 ```dart
 class PostsRiverpodPage extends ConsumerWidget {
@@ -119,7 +119,7 @@ class PostsRiverpodPage extends ConsumerWidget {
 }
 ```
 
-### ✅ AsyncValue.when() для обработки состояний:
+### ✅ AsyncValue.when() for state handling:
 
 ```dart
 postsAsync.when(
@@ -129,119 +129,119 @@ postsAsync.when(
 )
 ```
 
-### ✅ Чтение и модификация состояния:
+### ✅ Reading and modifying state:
 
 ```dart
-// Чтение состояния
+// Reading state
 final posts = ref.watch(postsProvider);
 
-// Запуск действий
+// Triggering actions
 ref.read(postsNotifierProvider.notifier).fetchPosts();
 ```
 
-## 📱 Функциональность
+## 📱 Features
 
-- ✅ Загрузка списка постов из JSONPlaceholder API
-- ✅ Детальный просмотр поста
-- ✅ Обработка состояний загрузки с Riverpod
-- ✅ Обработка ошибок с возможностью повтора
-- ✅ Clean Architecture с Riverpod pattern
+- ✅ Load posts list from JSONPlaceholder API
+- ✅ Detailed post view
+- ✅ Loading state handling with Riverpod
+- ✅ Error handling with retry capability
+- ✅ Clean Architecture with Riverpod pattern
 - ✅ Dependency Injection
-- ✅ FutureProvider и StateNotifier patterns
+- ✅ FutureProvider and StateNotifier patterns
 
-## 🚀 Запуск
+## 🚀 Getting Started
 
-1. Установите зависимости:
+1. Install dependencies:
 ```bash
 flutter pub get
 ```
 
-2. Сгенерируйте код для JSON сериализации:
+2. Generate code for JSON serialization:
 ```bash
 dart run build_runner build
 ```
 
-3. Запустите приложение:
+3. Run the application:
 ```bash
 flutter run
 ```
 
-## 📝 Основные файлы Riverpod
+## 📝 Key Riverpod Files
 
 ### Riverpod State Management:
-- `lib/features/posts/presentation/providers/posts_providers.dart` - Все Riverpod провайдеры
-- `lib/features/posts/presentation/pages/posts_riverpod_page.dart` - Главная страница с ConsumerWidget
-- `lib/features/posts/presentation/pages/post_riverpod_detail_page.dart` - Страница деталей поста
+- `lib/features/posts/presentation/providers/posts_providers.dart` - All Riverpod providers
+- `lib/features/posts/presentation/pages/posts_riverpod_page.dart` - Main page with ConsumerWidget
+- `lib/features/posts/presentation/pages/post_riverpod_detail_page.dart` - Post details page
 
 ### Main Application:
-- `lib/main.dart` - ProviderScope и настройка Riverpod
+- `lib/main.dart` - ProviderScope and Riverpod setup
 
-## 🎯 Цели обучения
+## 🎯 Learning Objectives
 
-После изучения этой ветки вы поймете:
+After studying this branch you will understand:
 
 1. ✅ **Riverpod State Management**
 2. ✅ **Provider, FutureProvider, StateNotifierProvider**
-3. ✅ **ConsumerWidget и ConsumerStatefulWidget**
-4. ✅ **AsyncValue и .when() метод**
-5. ✅ **ref.watch() и ref.read()**
-6. ✅ **ProviderScope для DI**
-7. ✅ **State management с Clean Architecture**
-8. ✅ **Family providers для параметров**
+3. ✅ **ConsumerWidget and ConsumerStatefulWidget**
+4. ✅ **AsyncValue and .when() method**
+5. ✅ **ref.watch() and ref.read()**
+6. ✅ **ProviderScope for DI**
+7. ✅ **State management with Clean Architecture**
+8. ✅ **Family providers for parameters**
 
 ## 🔄 Riverpod vs Provider vs BLoC
 
-| Аспект | Riverpod | Provider | BLoC |
+| Aspect | Riverpod | Provider | BLoC |
 |--------|----------|----------|------|
-| **Безопасность типов** | ✅ Compile-time | ❌ Runtime | ✅ Compile-time |
-| **Простота** | ✅ Очень простой | ✅ Простой | ❌ Сложный |
-| **Performance** | ✅ Отличный | ✅ Хороший | ✅ Отличный |
-| **Testing** | ✅ Легко | ✅ Легко | ✅ Легко |
-| **DevTools** | ✅ Отличные | ❌ Ограниченные | ✅ Отличные |
+| **Type Safety** | ✅ Compile-time | ❌ Runtime | ✅ Compile-time |
+| **Simplicity** | ✅ Very simple | ✅ Simple | ❌ Complex |
+| **Performance** | ✅ Excellent | ✅ Good | ✅ Excellent |
+| **Testing** | ✅ Easy | ✅ Easy | ✅ Easy |
+| **DevTools** | ✅ Excellent | ❌ Limited | ✅ Excellent |
 | **Async** | ✅ AsyncValue | ❌ Manual | ✅ Stream |
-| **Dependencies** | ✅ Автоматические | ❌ Manual | ❌ Manual |
+| **Dependencies** | ✅ Automatic | ❌ Manual | ❌ Manual |
 
-## 📚 Riverpod преимущества
+## 📚 Riverpod Advantages
 
-- 🔒 **Type Safety** - Compile-time проверки
-- 🚀 **Performance** - Автоматическая оптимизация
-- 🧪 **Testability** - Легкое тестирование и моки
-- 🔄 **Reactive** - Автоматическое обновление зависимостей
-- 🛠️ **DevTools** - Отличная отладка
-- 📱 **No Context** - Не нужен BuildContext
-- 🔧 **Clean API** - Интуитивный и простой API
+- 🔒 **Type Safety** - Compile-time checks
+- 🚀 **Performance** - Automatic optimization
+- 🧪 **Testability** - Easy testing and mocking
+- 🔄 **Reactive** - Automatic dependency updates
+- 🛠️ **DevTools** - Excellent debugging
+- 📱 **No Context** - No BuildContext dependency
+- 🔧 **Clean API** - Intuitive and simple API
 
 ## 🎯 Riverpod Provider Types
 
-### 1. **Provider** - Для неизменяемых данных
+### 1. **Provider** - For immutable data
 ```dart
 final configProvider = Provider((ref) => Config());
 ```
 
-### 2. **FutureProvider** - Для асинхронных операций  
+### 2. **FutureProvider** - For async operations  
 ```dart
 final userProvider = FutureProvider((ref) async => api.getUser());
 ```
 
-### 3. **StateProvider** - Для простого состояния
+### 3. **StateProvider** - For simple state
 ```dart
 final counterProvider = StateProvider((ref) => 0);
 ```
 
-### 4. **StateNotifierProvider** - Для сложного состояния
+### 4. **StateNotifierProvider** - For complex state
 ```dart
 final todosProvider = StateNotifierProvider<TodosNotifier, List<Todo>>((ref) => TodosNotifier());
 ```
 
 ## 🔗 API
 
-Используется **JSONPlaceholder API**:
+Uses **JSONPlaceholder API**:
 - Base URL: `https://jsonplaceholder.typicode.com`
 - Endpoints:
-  - `GET /posts` - Список всех постов
-  - `GET /posts/{id}` - Детали поста
+  - `GET /posts` - List of all posts
+  - `GET /posts/{id}` - Post details
 
-## 📚 Дополнительные ресурсы
+## 📚 Additional Resources
 
 - [Riverpod Documentation](https://riverpod.dev/)
 - [Riverpod vs Provider](https://riverpod.dev/docs/concepts/why_riverpod)
@@ -251,4 +251,4 @@ final todosProvider = StateNotifierProvider<TodosNotifier, List<Todo>>((ref) => 
 
 ---
 
-🎉 **Поздравляем!** Вы изучили реализацию Clean Architecture с Riverpod в Flutter!
+🎉 **Congratulations!** You have learned Clean Architecture implementation with Riverpod in Flutter!

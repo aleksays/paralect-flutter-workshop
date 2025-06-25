@@ -18,7 +18,7 @@ class ErrorDisplayWidget extends StatelessWidget {
             const Icon(Icons.error_outline, size: 64, color: Colors.red),
             const SizedBox(height: 16),
             Text(
-              'Ошибка',
+              'Error',
               style: Theme.of(
                 context,
               ).textTheme.headlineSmall?.copyWith(color: Colors.red),
@@ -34,7 +34,7 @@ class ErrorDisplayWidget extends StatelessWidget {
               ElevatedButton.icon(
                 onPressed: onRetry,
                 icon: const Icon(Icons.refresh),
-                label: const Text('Повторить'),
+                label: const Text('Retry'),
               ),
             ],
           ],

@@ -20,7 +20,7 @@ class _PostRiverpodDetailPageState
   @override
   void initState() {
     super.initState();
-    // Загружаем пост при инициализации
+    // Load post on initialization
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(postNotifierProvider.notifier).fetchPost(widget.postId);
     });
@@ -32,12 +32,12 @@ class _PostRiverpodDetailPageState
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Пост #${widget.postId} (Riverpod)'),
+        title: Text('Post #${widget.postId} (Riverpod)'),
         backgroundColor: Colors.purple,
         foregroundColor: Colors.white,
       ),
       body: postAsync.when(
-        loading: () => const LoadingWidget(message: 'Загрузка поста...'),
+        loading: () => const LoadingWidget(message: 'Loading post...'),
         error: (error, stackTrace) => ErrorDisplayWidget(
           message: error.toString(),
           onRetry: () =>
@@ -45,7 +45,7 @@ class _PostRiverpodDetailPageState
         ),
         data: (post) {
           if (post == null) {
-            return const Center(child: Text('Пост не найден'));
+            return const Center(child: Text('Post not found'));
           }
 
           return SingleChildScrollView(
@@ -68,13 +68,13 @@ class _PostRiverpodDetailPageState
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Пост #${post.id}',
+                                    'Post #${post.id}',
                                     style: Theme.of(
                                       context,
                                     ).textTheme.titleSmall,
                                   ),
                                   Text(
-                                    'Автор: ${post.userId}',
+                                    'Author: ${post.userId}',
                                     style: Theme.of(
                                       context,
                                     ).textTheme.bodySmall,
@@ -109,7 +109,7 @@ class _PostRiverpodDetailPageState
 
   @override
   void dispose() {
-    // Очищаем выбранный пост при закрытии страницы
+    // Clear selected post when closing the page
     ref.read(postNotifierProvider.notifier).clear();
     super.dispose();
   }

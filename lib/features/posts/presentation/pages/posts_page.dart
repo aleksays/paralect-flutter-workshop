@@ -14,14 +14,14 @@ class PostsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Посты'),
+        title: const Text('Posts'),
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
       ),
       body: BlocBuilder<PostsBloc, PostsState>(
         builder: (context, state) {
           if (state is PostsLoading) {
-            return const LoadingWidget(message: 'Загрузка постов...');
+            return const LoadingWidget(message: 'Loading posts...');
           } else if (state is PostsError) {
             return ErrorDisplayWidget(
               message: state.message,
@@ -32,9 +32,7 @@ class PostsPage extends StatelessWidget {
           } else if (state is PostsLoaded) {
             return _buildPostsList(context, state.posts);
           }
-          return const Center(
-            child: Text('Нажмите кнопку для загрузки постов'),
-          );
+          return const Center(child: Text('Tap the button to load posts'));
         },
       ),
       floatingActionButton: FloatingActionButton(
@@ -48,7 +46,7 @@ class PostsPage extends StatelessWidget {
 
   Widget _buildPostsList(BuildContext context, List<Post> posts) {
     if (posts.isEmpty) {
-      return const Center(child: Text('Нет доступных постов'));
+      return const Center(child: Text('No posts available'));
     }
 
     return ListView.builder(

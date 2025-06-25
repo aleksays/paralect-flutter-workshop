@@ -16,12 +16,12 @@ class PostsRiverpodPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Посты (Riverpod)'),
+        title: const Text('Posts (Riverpod)'),
         backgroundColor: Colors.purple,
         foregroundColor: Colors.white,
       ),
       body: postsAsync.when(
-        loading: () => const LoadingWidget(message: 'Загрузка постов...'),
+        loading: () => const LoadingWidget(message: 'Loading posts...'),
         error: (error, stackTrace) => ErrorDisplayWidget(
           message: error.toString(),
           onRetry: () => ref.read(postsNotifierProvider.notifier).refresh(),
@@ -42,7 +42,7 @@ class PostsRiverpodPage extends ConsumerWidget {
     List<Post> posts,
   ) {
     if (posts.isEmpty) {
-      return const Center(child: Text('Нет доступных постов'));
+      return const Center(child: Text('No posts available'));
     }
 
     return ListView.builder(
