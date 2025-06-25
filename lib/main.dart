@@ -35,13 +35,13 @@ class WorkshopMenuPage extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         children: [
           const Text(
-            'Добро пожаловать в Flutter Workshop!',
+            'Welcome to Flutter Workshop!',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 20),
           const Text(
-            'Выберите тему для изучения:',
+            'Choose a topic to explore:',
             style: TextStyle(fontSize: 18),
             textAlign: TextAlign.center,
           ),
@@ -67,7 +67,7 @@ class WorkshopMenuPage extends StatelessWidget {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
-                'Переключитесь на ветку: ${topic.branch}\nЭта функция доступна в соответствующей ветке',
+                'Switch to branch: ${topic.branch}\nThis feature is available in the corresponding branch',
               ),
               duration: const Duration(seconds: 3),
             ),
@@ -96,80 +96,27 @@ class WorkshopTopic {
 
 final List<WorkshopTopic> workshopTopics = [
   const WorkshopTopic(
-    title: 'Основы Dart',
-    description: 'Переменные, функции, классы, наследование',
-    branch: '01-dart-basics',
-    icon: Icons.code,
+    title: 'Clean Architecture + BLoC',
+    description:
+        'REST API with BLoC state management and event-driven architecture',
+    branch: '03-rest-api-futurebuilder',
+    icon: Icons.architecture,
     color: Colors.blue,
   ),
   const WorkshopTopic(
-    title: 'Основы Flutter',
-    description: 'Виджеты, layout, stateful/stateless',
-    branch: '02-flutter-basics',
-    icon: Icons.widgets,
+    title: 'Clean Architecture + Provider',
+    description:
+        'REST API with Provider state management and ChangeNotifier pattern',
+    branch: '04-rest-api-provider',
+    icon: Icons.layers,
     color: Colors.green,
   ),
   const WorkshopTopic(
-    title: 'REST API + FutureBuilder',
-    description: 'Работа с API, json_serializable, FutureBuilder',
-    branch: '03-rest-api-futurebuilder',
-    icon: Icons.api,
-    color: Colors.orange,
-  ),
-  const WorkshopTopic(
-    title: 'REST API + Provider',
-    description: 'Управление состоянием с Provider, posts feed',
-    branch: '04-rest-api-provider',
-    icon: Icons.layers,
-    color: Colors.purple,
-  ),
-  const WorkshopTopic(
-    title: 'REST API + BLoC',
-    description: 'Управление состоянием с BLoC, posts feed',
-    branch: '05-rest-api-bloc',
-    icon: Icons.architecture,
-    color: Colors.red,
-  ),
-  const WorkshopTopic(
-    title: 'REST API + Riverpod',
-    description: 'Управление состоянием с Riverpod, posts feed',
-    branch: '06-rest-api-riverpod',
+    title: 'Clean Architecture + Riverpod',
+    description:
+        'REST API with Riverpod state management and modern reactive programming',
+    branch: '05-rest-api-riverpod',
     icon: Icons.track_changes,
-    color: Colors.teal,
-  ),
-  const WorkshopTopic(
-    title: 'Темы + Provider',
-    description: 'Переключение тем (system, light, dark) с Provider',
-    branch: '07-theme-provider',
-    icon: Icons.palette,
-    color: Colors.indigo,
-  ),
-  const WorkshopTopic(
-    title: 'Темы + BLoC',
-    description: 'Переключение тем (system, light, dark) с BLoC',
-    branch: '08-theme-bloc',
-    icon: Icons.brightness_6,
-    color: Colors.pink,
-  ),
-  const WorkshopTopic(
-    title: 'Темы + Riverpod',
-    description: 'Переключение тем (system, light, dark) с Riverpod',
-    branch: '09-theme-riverpod',
-    icon: Icons.dark_mode,
-    color: Colors.brown,
-  ),
-  const WorkshopTopic(
-    title: 'Анимации',
-    description: 'Implicit и Explicit анимации, Hero анимации',
-    branch: '10-animations',
-    icon: Icons.animation,
-    color: Colors.cyan,
-  ),
-  const WorkshopTopic(
-    title: 'Tips & Tricks',
-    description: 'Полезные советы и трюки для Flutter разработки',
-    branch: '11-tips-tricks',
-    icon: Icons.lightbulb,
-    color: Colors.amber,
+    color: Colors.purple,
   ),
 ];
