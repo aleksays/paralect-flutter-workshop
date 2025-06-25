@@ -198,6 +198,131 @@ flutter run
 - `lib/features/posts/presentation/pages/posts_page.dart` - Main page with BlocBuilder
 - `lib/features/posts/presentation/pages/post_detail_page.dart` - Post details page
 
+## 💡 BLoC Tips & Tricks
+
+### 🚀 Performance Tips
+
+- **Use BlocListener** for side effects (navigation, snackbars):
+
+```dart
+  BlocListener<PostsBloc, PostsState>(
+    listener: (context, state) {
+      if (state is PostsError) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(state.message)),
+        );
+      }
+    },
+    child: YourWidget(),
+  )
+  ```
+
+- **Use BlocConsumer** when you need both listener and builder:
+
+  ```dart
+  BlocConsumer<PostsBloc, PostsState>(
+    listener: (context, state) {
+      // Handle side effects
+    },
+    builder: (context, state) {
+      // Build UI
+    },
+  )
+  ```
+
+- **Avoid rebuilding the entire page** - Use BlocBuilder only where needed:
+
+  ```dart
+  // ❌ BAD: Wraps entire page
+  BlocBuilder<PostsBloc, PostsState>(
+    builder: (context, state) => Scaffold(...),
+  )
+  
+  // ✅ GOOD: Only wraps dynamic content
+  Scaffold(
+    body: BlocBuilder<PostsBloc, PostsState>(
+      builder: (context, state) => DynamicContent(),
+    ),
+  )
+  ```
+
+### 🎯 BLoC Best Practices
+
+- **Keep BLoCs simple** - One BLoC per feature/screen
+- **Use Equatable** for states and events to prevent unnecessary rebuilds
+- **Handle all state cases** in BlocBuilder:
+
+  ```dart
+  builder: (context, state) {
+    return switch (state) {
+      PostsInitial() => InitialWidget(),
+      PostsLoading() => LoadingWidget(),
+      PostsLoaded() => PostsList(state.posts),
+      PostsError() => ErrorWidget(state.message),
+    };
+  }
+  ```
+
+- **Use meaningful event names**:
+
+  ```dart
+  // ❌ BAD
+  class LoadData extends PostsEvent {}
+  
+  // ✅ GOOD
+  class GetPostsEvent extends PostsEvent {}
+  class RefreshPostsEvent extends PostsEvent {}
+  ```
+
+### 🔧 Common BLoC Mistakes
+
+- **Not disposing BLoCs** - Always use BlocProvider.value when passing existing BLoCs
+- **Creating BLoCs in build method** - Create them in providers or dependency injection
+- **Calling add() in build method** - Use initState or listeners instead
+- **Mutating state objects** - Always create new state instances
+- **Adding events synchronously** - Use async operations in event handlers
+
+### 🧪 Testing BLoC
+
+```dart
+group('PostsBloc', () {
+  late PostsBloc postsBloc;
+  late MockGetPosts mockGetPosts;
+
+  setUp(() {
+    mockGetPosts = MockGetPosts();
+    postsBloc = PostsBloc(getPosts: mockGetPosts);
+  });
+
+  blocTest<PostsBloc, PostsState>(
+    'emits [PostsLoading, PostsLoaded] when GetPostsEvent succeeds',
+    build: () => postsBloc,
+    act: (bloc) => bloc.add(GetPostsEvent()),
+    expect: () => [PostsLoading(), PostsLoaded(testPosts)],
+  );
+});
+```
+
+### 📱 BLoC DevTools
+
+- Enable Flutter DevTools for BLoC inspection
+- Use BlocObserver for debugging:
+
+  ```dart
+  class SimpleBlocObserver extends BlocObserver {
+    @override
+    void onTransition(BlocBase bloc, Transition transition) {
+      super.onTransition(bloc, transition);
+      print('${bloc.runtimeType} $transition');
+    }
+  }
+  
+  void main() {
+    Bloc.observer = SimpleBlocObserver();
+    runApp(MyApp());
+  }
+  ```
+
 ### Main Application
 
 - `lib/main.dart` - BlocProvider setup
