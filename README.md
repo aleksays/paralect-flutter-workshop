@@ -75,17 +75,14 @@ enum PostsStatus { initial, loading, loaded, error }
 
 class PostsProvider extends ChangeNotifier {
   final GetPosts _getPosts;
-  final GetPost _getPost;
   
   PostsStatus _status = PostsStatus.initial;
   List<Post> _posts = [];
-  Post? _selectedPost;
   String _errorMessage = '';
   
   // Getters
   PostsStatus get status => _status;
   List<Post> get posts => _posts;
-  Post? get selectedPost => _selectedPost;
   String get errorMessage => _errorMessage;
   
   Future<void> fetchPosts() async {
@@ -155,15 +152,40 @@ ChangeNotifierProvider<PostsProvider>(
 )
 ```
 
+## 🏗️ Architecture Design Decision
+
+### Simplified State Management
+
+In this implementation, we've adopted a **simplified approach** to state management:
+
+- **PostsProvider**: Manages only the posts list state
+- **PostDetailPage**: Manages its own state using `setState` and direct UseCase calls
+
+### Why This Approach?
+
+1. **Single Responsibility**: Provider handles only what's shared (posts list)
+2. **Avoid Over-engineering**: Detail pages don't need global state
+3. **Better Performance**: No unnecessary rebuilds across the app
+4. **Simpler Navigation**: Pass `postId` instead of managing selected post state
+5. **Easier Testing**: Each component has clear, isolated responsibilities
+
+### Benefits:
+
+✅ **No state conflicts** between list and detail pages  
+✅ **Cleaner Provider** with fewer responsibilities  
+✅ **No disposal issues** when navigating  
+✅ **Self-contained detail pages** with their own loading/error states  
+
 ## 📱 Features
 
 - ✅ Load posts list from JSONPlaceholder API
-- ✅ Detailed post view
+- ✅ Detailed post view with separate state management
 - ✅ Loading state handling with Provider
 - ✅ Error handling with retry capability
 - ✅ Clean Architecture with Provider pattern
 - ✅ Dependency Injection
 - ✅ ChangeNotifier for state management
+- ✅ Simplified architecture: Provider for lists, local state for details
 
 ## 🚀 Getting Started
 
