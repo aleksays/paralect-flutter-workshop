@@ -10,9 +10,11 @@ This workshop is organized into branches, each demonstrating different aspects o
 |--------|-------|------------------|-------------|
 | [`main`](../../tree/main) | **Workshop Overview** | - | Main branch with project overview and navigation |
 | [`01-dart-basics`](../../tree/01-dart-basics) | **Dart Fundamentals** | - | Variables, functions, classes, OOP concepts |
+| [`02-flutter-animations`](../../tree/02-flutter-animations) | **Flutter Animations** | - | Implicit/explicit animations, Hero transitions, tips & tricks |
 | [`03-rest-api-futurebuilder`](../../tree/03-rest-api-futurebuilder) | **BLoC Pattern** | flutter_bloc | Clean Architecture + BLoC with event-driven architecture |
 | [`04-rest-api-provider`](../../tree/04-rest-api-provider) | **Provider Pattern** | provider | Clean Architecture + Provider with ChangeNotifier |
 | [`05-rest-api-riverpod`](../../tree/05-rest-api-riverpod) | **Riverpod Pattern** | riverpod | Clean Architecture + Riverpod with reactive programming |
+| [`06-rest-api-riverpod-annotations`](../../tree/06-rest-api-riverpod-annotations) | **Riverpod Annotations** | riverpod | Modern Riverpod with annotations and code generation |
 
 ## 🏗️ Clean Architecture Overview
 
@@ -123,6 +125,9 @@ Each branch contains:
    # For Dart basics
    git checkout 01-dart-basics
    
+   # For Flutter animations and tips
+   git checkout 02-flutter-animations
+   
    # For BLoC pattern
    git checkout 03-rest-api-futurebuilder
    
@@ -131,6 +136,9 @@ Each branch contains:
    
    # For Riverpod pattern
    git checkout 05-rest-api-riverpod
+   
+   # For Riverpod with annotations
+   git checkout 06-rest-api-riverpod-annotations
    ```
 
 3. **Install dependencies:**
