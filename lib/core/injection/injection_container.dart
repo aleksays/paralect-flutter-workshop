@@ -29,13 +29,31 @@ Future<void> init() async {
   );
 
   // External
-  sl.registerLazySingleton(
-    () => Dio(
-      BaseOptions(
-        baseUrl: 'https://jsonplaceholder.typicode.com',
-        connectTimeout: const Duration(seconds: 5),
-        receiveTimeout: const Duration(seconds: 3),
-      ),
+  final dio = Dio(
+    BaseOptions(
+      baseUrl: 'https://jsonplaceholder.typicode.com',
+      connectTimeout: const Duration(seconds: 10),
+      receiveTimeout: const Duration(seconds: 10),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'User-Agent': 'Flutter-Workshop-App/1.0.0',
+      },
     ),
   );
+
+  // Add logging interceptor for debugging
+  dio.interceptors.add(
+    LogInterceptor(
+      request: true,
+      requestHeader: true,
+      requestBody: true,
+      responseHeader: true,
+      responseBody: true,
+      error: true,
+      logPrint: (obj) => print('🌐 HTTP: $obj'),
+    ),
+  );
+
+  sl.registerLazySingleton(() => dio);
 }
