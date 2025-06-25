@@ -41,6 +41,16 @@ class FlutterAnimationsApp extends StatelessWidget {
   }
 }
 
+class _CardData {
+  final String title;
+  final String description;
+  final IconData icon;
+  final Color color;
+  final VoidCallback onTap;
+
+  _CardData(this.title, this.description, this.icon, this.color, this.onTap);
+}
+
 class AnimationsHomePage extends StatelessWidget {
   const AnimationsHomePage({super.key});
 
@@ -52,89 +62,101 @@ class AnimationsHomePage extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         centerTitle: true,
       ),
-      body: GridView.count(
-        crossAxisCount: 2,
+      body: Padding(
         padding: const EdgeInsets.all(16),
-        crossAxisSpacing: 16,
-        mainAxisSpacing: 16,
-        children: [
-          _buildAnimationCard(
-            context,
-            'Basic Animations',
-            'Implicit animations like AnimatedContainer, AnimatedOpacity',
-            Icons.play_circle,
-            Colors.blue,
-            () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const BasicAnimationsPage(),
+        child: GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 16,
+            mainAxisSpacing: 16,
+            childAspectRatio: 0.85, // Make cards taller
+          ),
+          itemCount: 6,
+          itemBuilder: (context, index) {
+            final cards = [
+              _CardData(
+                'Basic\nAnimations',
+                'AnimatedContainer,\nAnimatedOpacity',
+                Icons.play_circle,
+                Colors.blue,
+                () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const BasicAnimationsPage(),
+                  ),
+                ),
               ),
-            ),
-          ),
-          _buildAnimationCard(
-            context,
-            'Custom Animations',
-            'Explicit animations with AnimationController',
-            Icons.tune,
-            Colors.green,
-            () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const CustomAnimationsPage(),
+              _CardData(
+                'Custom\nAnimations',
+                'with\nAnimationController',
+                Icons.tune,
+                Colors.green,
+                () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CustomAnimationsPage(),
+                  ),
+                ),
               ),
-            ),
-          ),
-          _buildAnimationCard(
-            context,
-            'Hero Animations',
-            'Shared element transitions between screens',
-            Icons.flight_takeoff,
-            Colors.orange,
-            () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const HeroAnimationsPage(),
+              _CardData(
+                'Hero\nAnimations',
+                'transitions between\nscreens',
+                Icons.flight_takeoff,
+                Colors.orange,
+                () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HeroAnimationsPage(),
+                  ),
+                ),
               ),
-            ),
-          ),
-          _buildAnimationCard(
-            context,
-            'Page Transitions',
-            'Custom page route animations',
-            Icons.swap_horiz,
-            Colors.purple,
-            () => Navigator.push(
-              context,
-              _createCustomRoute(const PageTransitionsPage()),
-            ),
-          ),
-          _buildAnimationCard(
-            context,
-            'Tips & Tricks',
-            'Performance optimization and best practices',
-            Icons.lightbulb,
-            Colors.amber,
-            () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const TipsAndTricksPage(),
+              _CardData(
+                'Page\nTransitions',
+                'animations',
+                Icons.swap_horiz,
+                Colors.purple,
+                () => Navigator.push(
+                  context,
+                  _createCustomRoute(const PageTransitionsPage()),
+                ),
               ),
-            ),
-          ),
-          _buildAnimationCard(
-            context,
-            'Physics Animations',
-            'Spring and gravity-based animations',
-            Icons.psychology,
-            Colors.teal,
-            () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const PhysicsAnimationsPage(),
+              _CardData(
+                'Tips & Tricks',
+                'Performance\noptimization and best\npractices',
+                Icons.lightbulb,
+                Colors.amber,
+                () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const TipsAndTricksPage(),
+                  ),
+                ),
               ),
-            ),
-          ),
-        ],
+              _CardData(
+                'Physics\nAnimations',
+                'based animations',
+                Icons.psychology,
+                Colors.teal,
+                () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const PhysicsAnimationsPage(),
+                  ),
+                ),
+              ),
+            ];
+
+            final card = cards[index];
+            return _buildAnimationCard(
+              context,
+              card.title,
+              card.description,
+              card.icon,
+              card.color,
+              card.onTap,
+            );
+          },
+        ),
       ),
     );
   }
@@ -153,24 +175,34 @@ class AnimationsHomePage extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(12),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, size: 48, color: color),
-              const SizedBox(height: 12),
-              Text(
-                title,
-                style: Theme.of(
-                  context,
-                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
+              Icon(icon, size: 40, color: color),
               const SizedBox(height: 8),
-              Text(
-                description,
-                style: Theme.of(context).textTheme.bodySmall,
-                textAlign: TextAlign.center,
+              Flexible(
+                child: Text(
+                  title,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Flexible(
+                child: Text(
+                  description,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall?.copyWith(fontSize: 11),
+                  textAlign: TextAlign.center,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ],
           ),
